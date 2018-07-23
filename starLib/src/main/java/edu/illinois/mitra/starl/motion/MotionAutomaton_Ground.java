@@ -11,6 +11,10 @@ import edu.illinois.mitra.starl.objects.Common;
 import edu.illinois.mitra.starl.objects.ItemPosition;
 import edu.illinois.mitra.starl.objects.ObstacleList;
 
+/**
+ * Base logic for all ground motion, allowing apps to use a goTo method to reach a specific point.
+ * Extended by SimMotionAutomaton_Ground for simulation and RealMotionAutomaton_Ground for real life applications.
+ */
 public abstract class MotionAutomaton_Ground extends RobotMotion {
     protected static final String TAG = "MotionAutomaton";
     protected static final String ERR = "Critical Error";
@@ -134,8 +138,6 @@ public abstract class MotionAutomaton_Ground extends RobotMotion {
         while(true) {
 //			gvh.gps.getObspointPositions().updateObs();
             if(running) {
-                // why is getModel being used? Think it should be get position.
-                //bot = (Model_iRobot)gvh.plat.getModel();
                 bot = (Model_Ground)gvh.gps.getMyPosition();
                 int distance = (int) bot.distanceTo(destination);
                 int angle = bot.angleTo(destination);
@@ -302,17 +304,6 @@ public abstract class MotionAutomaton_Ground extends RobotMotion {
 
     public abstract void cancel();
 
-    // Ramp linearly from min at param.SMALLTURN_ANGLE to max at param.SLOWTURN_ANGLE
-    private int TurnSpeed(int angle) {
-        if(angle > param.SLOWTURN_ANGLE) {
-            return param.TURNSPEED_MAX;
-        } else if(angle > param.SMALLTURN_ANGLE && angle <= param.SLOWTURN_ANGLE) {
-            return param.TURNSPEED_MIN + (int) ((angle - param.SMALLTURN_ANGLE) * turnspeed);
-        } else {
-            return param.TURNSPEED_MIN;
-        }
-    }
-
     @Override
     public void receivedKeyInput(String key){
         curKey = key;
@@ -329,6 +320,17 @@ public abstract class MotionAutomaton_Ground extends RobotMotion {
     protected abstract void straight(int velocity);
 
     protected abstract void turn(int velocity, int angle);
+
+    // Ramp linearly from min at param.SMALLTURN_ANGLE to max at param.SLOWTURN_ANGLE
+    private int TurnSpeed(int angle) {
+        if(angle > param.SLOWTURN_ANGLE) {
+            return param.TURNSPEED_MAX;
+        } else if(angle > param.SMALLTURN_ANGLE && angle <= param.SLOWTURN_ANGLE) {
+            return param.TURNSPEED_MIN + (int) ((angle - param.SMALLTURN_ANGLE) * turnspeed);
+        } else {
+            return param.TURNSPEED_MIN;
+        }
+    }
 
     private void use_colavoid() {
         if(stage != null) {

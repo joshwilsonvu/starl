@@ -1,7 +1,10 @@
 package edu.illinois.mitra.starl.models;
 
+import android.content.Context;
+
 import java.util.Random;
 
+import edu.illinois.mitra.starl.gvh.GlobalVarHolder;
 import edu.illinois.mitra.starl.modelinterfaces.ModelInterface;
 import edu.illinois.mitra.starl.objects.ItemPosition;
 import edu.illinois.mitra.starl.objects.ObstacleList;
@@ -32,13 +35,21 @@ public abstract class Model extends ItemPosition {
 	public abstract boolean inMotion();
 	public abstract void updateSensor(ObstacleList obspoint_positions, PositionList<ItemPosition> sensepoint_positions);
 
-	// Constants to be set in the concrete classes
+	/**
+	 * @return the minimum distance from the model an object can be without colliding
+	 */
 	public abstract int radius();
+
+	/**
+	 *
+	 * @return
+	 */
 	public abstract String ip();
 
-	// to replace if-else chain with instanceof to determine the bluetooth interface for a particular model.
-	// This would be a static factory function if it didn't have to be polymorphic.
-	public abstract Class<? extends ModelInterface> getBluetoothInterface();
+	/**
+	 * Create the real interface for a particular model.
+	 */
+	public abstract ModelInterface createModelInterface(GlobalVarHolder gvh, Context context, String mac);
 
 	public Model() {}
 

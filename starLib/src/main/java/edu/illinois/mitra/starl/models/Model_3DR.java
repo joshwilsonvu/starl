@@ -1,15 +1,19 @@
 package edu.illinois.mitra.starl.models;
 
-/**
- * Created by yangy14 on 6/2/2017.
- */
+import android.content.Context;
+import android.provider.Settings;
 
 import edu.illinois.mitra.starl.exceptions.ItemFormattingException;
+import edu.illinois.mitra.starl.gvh.GlobalVarHolder;
 import edu.illinois.mitra.starl.modelinterfaces.DroneInterface;
 import edu.illinois.mitra.starl.modelinterfaces.o3DRController;
 import edu.illinois.mitra.starl.objects.ItemPosition;
 import edu.illinois.mitra.starl.objects.PIDParams;
 
+/**
+ * A model of the 3DR.
+ * @see Model_Drone
+ */
 public class Model_3DR extends Model_Drone {
 
     @SuppressWarnings("unused")
@@ -57,8 +61,8 @@ public class Model_3DR extends Model_Drone {
     public double max_yaw_speed() { return 200; }
 
     @Override
-    public Class<? extends DroneInterface> getBluetoothInterface() {
-        return o3DRController.class;
+    public DroneInterface createModelInterface(GlobalVarHolder gvh, Context context, String mac) {
+        return new o3DRController();
     }
 
     @Override

@@ -1,34 +1,39 @@
 package edu.illinois.mitra.starl.models;
 
+import android.content.Context;
+
 import edu.illinois.mitra.starl.exceptions.ItemFormattingException;
+import edu.illinois.mitra.starl.gvh.GlobalVarHolder;
 import edu.illinois.mitra.starl.modelinterfaces.DjiController;
 import edu.illinois.mitra.starl.modelinterfaces.DroneInterface;
 import edu.illinois.mitra.starl.objects.ItemPosition;
 import edu.illinois.mitra.starl.objects.PIDParams;
 
 /**
- * This class represents a simple model of the quadcopter
- * @author Yixiao Lin
- * @version 1.0
+ * A model of the DJI Mavic.
+ * @see Model_Drone
  */
-
 public class Model_Mavic extends Model_Drone {
 
 	@SuppressWarnings("unused")
 	public Model_Mavic() {}
 
+	@SuppressWarnings("unused")
 	public Model_Mavic(String received) throws ItemFormattingException {
 		super(received);
 	}
 
+	@SuppressWarnings("unused")
 	public Model_Mavic(String name, int x, int y) {
 		super(name, x, y);
 	}
 
+	@SuppressWarnings("unused")
 	public Model_Mavic(String name, int x, int y, int z) {
 		super(name, x, y, z);
 	}
 
+	@SuppressWarnings("unused")
 	public Model_Mavic(ItemPosition t_pos) {
 		super(t_pos);
 	}
@@ -58,16 +63,16 @@ public class Model_Mavic extends Model_Drone {
 	public double max_yaw_speed() { return 200; }
 
 	@Override
-	public Class<? extends DroneInterface> getBluetoothInterface() {
-		return DjiController.class;
+	public DroneInterface createModelInterface(GlobalVarHolder gvh, Context context, String mac) {
+		return new DjiController(gvh, context, mac);
 	}
 
 	@Override
 	public PIDParams getPIDParams() {
 		PIDParams p = new PIDParams();
-		p.Kp = 0.075;//0.0714669809792096;
+		p.Kp = 3.25E-4;//0.0714669809792096;
 		p.Ki = 0.75*p.Kp;//0.0110786899216426;
-		p.Kd = 0.5;//0.113205037832174;
+		p.Kd = 1.75E-3;//0.113205037832174;
 		p.saturationLimit = 50;
 		p.windUpLimit = 185;
 		p.filterLength = 8;

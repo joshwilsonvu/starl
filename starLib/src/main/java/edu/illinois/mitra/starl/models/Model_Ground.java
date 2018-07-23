@@ -1,6 +1,9 @@
 package edu.illinois.mitra.starl.models;
 
+import android.content.Context;
+
 import edu.illinois.mitra.starl.exceptions.ItemFormattingException;
+import edu.illinois.mitra.starl.gvh.GlobalVarHolder;
 import edu.illinois.mitra.starl.modelinterfaces.GroundInterface;
 import edu.illinois.mitra.starl.objects.Common;
 import edu.illinois.mitra.starl.objects.ItemPosition;
@@ -8,6 +11,15 @@ import edu.illinois.mitra.starl.objects.ObstacleList;
 import edu.illinois.mitra.starl.objects.Point3i;
 import edu.illinois.mitra.starl.objects.PositionList;
 
+/**
+ * This class represents all ground models that have zero-point turning. It uses velocity
+ * and angle parameters, and provides methods predict(), updatePos(), inMotion(), collision(),
+ * and updateSensor() used in other classes.
+ *
+ * Subclasses must override the abstract methods, making sure each returns a constant value.
+ *
+ * @see Model
+ */
 public abstract class Model_Ground extends Model {
     public double angle = 0;
     public Type type = Type.GET_TO_GOAL;
@@ -54,7 +66,8 @@ public abstract class Model_Ground extends Model {
         this.angle = t_pos.index;
     }
 
-    public abstract Class<? extends GroundInterface> getBluetoothInterface();
+    @Override
+    public abstract GroundInterface createModelInterface(GlobalVarHolder gvh, Context context, String mac);
 
     @Override
     public String toString() {
@@ -133,13 +146,7 @@ public abstract class Model_Ground extends Model {
         int retAngle = Common.min_magitude((int)(otherAngle - angle),(int)(angle - otherAngle));
         retAngle = (int)Common.angleWrap(retAngle);
         if(retAngle > 180) {
-            retAngle = retAngle-360;
-        }
-        if(retAngle <= -180) {
-            retAngle = retAngle+360;
-        }
-        if(retAngle > 180 || retAngle< -180){
-            System.out.println(retAngle);
+            retAngle -= 360;
         }
         return  Math.round(retAngle);
     }
@@ -149,7 +156,7 @@ public abstract class Model_Ground extends Model {
         this.angle = angle;
     }
 
-    public void setPos(Model_iRobot other) {
+    public void setPos(Model_Ground other) {
         this.setPos(other.getPos());
         this.angle = other.angle;
     }

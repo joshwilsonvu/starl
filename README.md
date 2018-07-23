@@ -39,7 +39,7 @@ case "blue":
             this.type = ModelRegistry.create("Model_iRobot", name, 0, 0);
             break;
         case Common.MINIDRONE:
-            this.type = ModelRegistry.create("Model_quadcopter", name, 0, 0);
+            this.type = ModelRegistry.create("Model_Minidrone", name, 0, 0);
             break;
         case Common.PHANTOM:
             this.type = ModelRegistry.create("Model_Phantom", name, 0, 0);
@@ -51,13 +51,13 @@ case "blue":
     break;
 ...
 ```
-Then back in `RobotsActivity.java` you can create a robot in the `botInfo[]` array with the corresponding color:
+Then back in `RobotsActivity.java` in the `loadBotInfo()` method you can create each robot info 
+with the corresponding color:
 ```java
-botInfo[0] = new BotInfoSelector("blue", Common.PHANTOM, Common.NEXUS7);
-```
-The total number of robots must be set with:
-```java
-numRobots = 1;
+return new BotInfoSelector[] {
+        new BotInfoSelector("blue", "Model_Phantom", Common.NEXUS7)
+        //, other entries
+};
 ```
 
 ### Configuring the MatLab "GPS"
