@@ -278,6 +278,7 @@ public class RobotsActivity extends Activity implements MessageListener {
 	 * @return an array of BotInfoSelector objects representing tablet and robot info
 	 */
 	private BotInfoSelector[] loadBotInfo() {
+		// TODO: load bots.xml to determine which bots to use
 		return new BotInfoSelector[] {
 				new BotInfoSelector("blue", "Model_Phantom", Common.NEXUS7)
 				//, new BotInfoSelector("red", "Model_Mavic", Common.NEXUS7)

@@ -20,6 +20,7 @@ public class BotInfoSelector {
 
 
     public BotInfoSelector(String color, String typeName, int deviceType) {
+        // TODO: load bot_addresses.xml and device_addresses.xml to determine specific hardware addresses
         this.model = ModelRegistry.create(typeName, name, 0, 0);
         switch (color) {
             case "red":

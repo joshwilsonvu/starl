@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<models>
+    <!-- This XML file selects which robots are going to be used in the application.
+         See bot_addresses.xml. -->
+    <model color="red" typename="Model_iRobot"/>
+</models>
