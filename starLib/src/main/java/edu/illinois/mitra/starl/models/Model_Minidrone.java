@@ -1,6 +1,9 @@
 package edu.illinois.mitra.starl.models;
 
+import android.content.Context;
+
 import edu.illinois.mitra.starl.exceptions.ItemFormattingException;
+import edu.illinois.mitra.starl.gvh.GlobalVarHolder;
 import edu.illinois.mitra.starl.modelinterfaces.DroneInterface;
 import edu.illinois.mitra.starl.modelinterfaces.MiniDroneInterface;
 import edu.illinois.mitra.starl.objects.ItemPosition;
@@ -57,8 +60,8 @@ public class Model_Minidrone extends Model_Drone {
 	public double max_yaw_speed() { return 200; }
 
 	@Override
-	public Class<? extends DroneInterface> getModelInterface() {
-		return MiniDroneInterface.class;
+	public DroneInterface createModelInterface(GlobalVarHolder gvh, Context context, String mac) {
+		return new MiniDroneInterface(gvh, context, mac);
 	}
 
 	@Override

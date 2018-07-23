@@ -1,6 +1,9 @@
 package edu.illinois.mitra.starl.models;
 
+import android.content.Context;
+
 import edu.illinois.mitra.starl.exceptions.ItemFormattingException;
+import edu.illinois.mitra.starl.gvh.GlobalVarHolder;
 import edu.illinois.mitra.starl.modelinterfaces.GroundInterface;
 import edu.illinois.mitra.starl.modelinterfaces.IRobotInterface;
 import edu.illinois.mitra.starl.objects.ItemPosition;
@@ -43,7 +46,7 @@ public class Model_iRobot extends Model_Ground {
 	public String ip() { return "10.255.24.0"; }
 
 	@Override
-	public Class<? extends GroundInterface> getModelInterface() {
-		return IRobotInterface.class;
+	public GroundInterface createModelInterface(GlobalVarHolder gvh, Context context, String mac) {
+		return new IRobotInterface(gvh, mac);
 	}
 }

@@ -1,6 +1,9 @@
 package edu.illinois.mitra.starl.models;
 
+import android.content.Context;
+
 import edu.illinois.mitra.starl.exceptions.ItemFormattingException;
+import edu.illinois.mitra.starl.gvh.GlobalVarHolder;
 import edu.illinois.mitra.starl.modelinterfaces.GroundInterface;
 import edu.illinois.mitra.starl.objects.Common;
 import edu.illinois.mitra.starl.objects.ItemPosition;
@@ -63,7 +66,8 @@ public abstract class Model_Ground extends Model {
         this.angle = t_pos.index;
     }
 
-    public abstract Class<? extends GroundInterface> getModelInterface();
+    @Override
+    public abstract GroundInterface createModelInterface(GlobalVarHolder gvh, Context context, String mac);
 
     @Override
     public String toString() {

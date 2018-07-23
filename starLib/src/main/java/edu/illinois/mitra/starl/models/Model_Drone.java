@@ -1,6 +1,9 @@
 package edu.illinois.mitra.starl.models;
 
+import android.content.Context;
+
 import edu.illinois.mitra.starl.exceptions.ItemFormattingException;
+import edu.illinois.mitra.starl.gvh.GlobalVarHolder;
 import edu.illinois.mitra.starl.modelinterfaces.DroneInterface;
 import edu.illinois.mitra.starl.objects.Common;
 import edu.illinois.mitra.starl.objects.ItemPosition;
@@ -27,9 +30,10 @@ public abstract class Model_Drone extends Model {
     public abstract double max_pitch_roll(); // in degrees
     public abstract double max_yaw_speed(); // degrees/s
     public abstract double mass(); // kg
-    public abstract double height();
+    public abstract double height(); // mm
 
-    public abstract Class<? extends DroneInterface> getModelInterface();
+    @Override
+    public abstract DroneInterface createModelInterface(GlobalVarHolder gvh, Context context, String mac);
     public abstract PIDParams getPIDParams();
 
     // platform specific control parameters: see page 78 of http://www.msh-tools.com/ardrone/ARDrone_Developer_Guide.pdf
@@ -103,71 +107,6 @@ public abstract class Model_Drone extends Model {
     public void setVelocity(Vector3f vel) {
         this.vel = vel;
     }
-
-    /*
-	@Override
-	public Point3i predict(double[] noises, double timeSinceUpdate) {
-		if(noises.length != 3){
-			System.out.println("Incorrect number of noises parameters passed in, please pass in getX, getY, getZ, yaw, pitch, roll noises");
-			return new Point3i(getX(), getY(), getZ());
-		}
-		v_yaw += (v_yawR - v_yaw)*timeSinceUpdate;
-		pitch += (pitchR - pitch)*timeSinceUpdate;
-		roll += (rollR-roll)*timeSinceUpdate;
-		gaz += (gazR-gaz)*timeSinceUpdate;
-
-		double xNoise = (getRand()*2*noises[0]) - noises[0];
-		double yNoise = (getRand()*2*noises[0]) - noises[0];
-		double zNoise = (getRand()*2*noises[0]) - noises[0];
-		double yawNoise = (getRand()*2*noises[1]) - noises[1];
-
-		windt += timeSinceUpdate;
-		setWindxNoise(xNoise + windx*Math.sin(windt));
-		setWindyNoise(yNoise + windy*Math.sin(windt));
-
-
-		//	double yawNoise = (getRand()*2*noises[3]) - noises[3];
-		//double pitchNoise = (getRand()*2*noises[4]) - noises[4];
-		//double rollNoise = (getRand()*2*noises[5]) - noises[5];
-
-		//TODO: correct the model
-
-		// speed is in millimeter/second
-		// mass in kilograms
-		// each pixel is 1 millimeter
-		// timeSinceUpdate is in second
-		int dX = (int) (xNoise + getV_x() *timeSinceUpdate + getWindxNoise());
-		int dY= (int) (yNoise +  getV_y() *timeSinceUpdate + getWindyNoise());
-		int dZ= (int) (zNoise +  gaz*timeSinceUpdate);
-
-		x_p = getX() +dX;
-		y_p = getY() +dY;
-		z_p = getZ() +dZ;
-
-		double thrust;
-		if((mass() * Math.cos(Math.toRadians(roll)) * Math.cos(Math.toRadians(pitch))) != 0){
-			thrust = ((gaz+1000) / (mass() * Math.cos(Math.toRadians(roll))) / (Math.cos(Math.toRadians(pitch))));
-		}
-		else{
-			thrust = 1000;
-		}
-
-		//double thrust = Math.abs((gaz) * (mass * Math.cos(Math.toRadians(roll)) * Math.cos(Math.toRadians(pitch))));
-		//double thrust = 100;
-		double dv_x = - ((thrust)  * (Math.sin(Math.toRadians(roll)) * Math.sin(Math.toRadians(yaw)) + Math.cos(Math.toRadians(roll)) * Math.sin(Math.toRadians(pitch)) * Math.cos(Math.toRadians(yaw))))/ (mass()) ;
-		double dv_y = ((thrust)  * (Math.sin(Math.toRadians(roll)) * Math.cos(Math.toRadians(yaw)) - Math.cos(Math.toRadians(roll)) * Math.sin(Math.toRadians(pitch)) * Math.sin(Math.toRadians(yaw))))/ (mass()) ;
-
-
-		v_x_p = getV_x() + dv_x * timeSinceUpdate;
-		v_y_p = getV_y() + dv_y * timeSinceUpdate;
-		v_z_p = gaz;
-
-		double dYaw = (v_yaw*timeSinceUpdate);
-		yaw_p = Common.angleWrap(yaw + dYaw);
-
-		return new Point3i(x_p, y_p, z_p);
-	}
-	*/
 
     public Point3i predict(double[] noises, double timeSinceUpdate) {
         if(noises.length != 3){
