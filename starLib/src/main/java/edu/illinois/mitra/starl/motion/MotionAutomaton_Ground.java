@@ -44,6 +44,9 @@ public abstract class MotionAutomaton_Ground extends RobotMotion {
     private int RanAngle = 0;
     private double linspeed;
     private double turnspeed;
+    private long curTime;
+    private long timeLength;
+    private boolean useTime;
 
     public MotionAutomaton_Ground(GlobalVarHolder gvh) {
         super(gvh.id.getName());
@@ -63,8 +66,7 @@ public abstract class MotionAutomaton_Ground extends RobotMotion {
     }
 
     public void goTo(ItemPosition dest) {
-        Scanner in = new Scanner(gvh.gps.getMyPosition().getName()).useDelimiter("[^0-9]+");
-        int index = in.nextInt();
+        int index = gvh.id.getIdNumber();
         Vector<ObstacleList> temp = gvh.gps.getViews();
         ObstacleList obsList;
         if(!temp.isEmpty()) {
@@ -101,7 +103,22 @@ public abstract class MotionAutomaton_Ground extends RobotMotion {
     }
 
     @Override
-    public void userControl(ItemPosition dest, ObstacleList obs){ }
+    public void userControl(ItemPosition dest){
+        this.destination = new ItemPosition(dest.name, dest.getX(), dest.getY(),0);
+        this.mode = OPMODE.USER_CONTROL;
+        curKey.equals("stop");
+        useTime = false;
+        startMotion();
+
+    }
+
+    @Override
+    public void userControl(long timeLength){
+        this.mode = OPMODE.USER_CONTROL;
+        this.timeLength = timeLength + (System.nanoTime()/1000000);
+        useTime = true;
+        startMotion();
+    }
 
     @Override
     public synchronized void start() {
@@ -150,7 +167,7 @@ public abstract class MotionAutomaton_Ground extends RobotMotion {
                 if(!colliding && stage != null) {
                     if(stage != prev)
                         gvh.log.e(TAG, "Stage is: " + stage.toString());
-                    if(distance <= param.GOAL_RADIUS) {
+                    if((!useTime && distance <= param.GOAL_RADIUS) || (useTime && (System.nanoTime()/1000000) >= timeLength )) {
                         next = STAGE.GOAL;
                     }
                     switch(stage) {
@@ -162,6 +179,8 @@ public abstract class MotionAutomaton_Ground extends RobotMotion {
                                 } else {
                                     next = STAGE.TURN;
                                 }
+                            } else if(mode == OPMODE.USER_CONTROL) {
+                                next = STAGE.USER_CONTROL;
                             } else {
                                 next = STAGE.TURN;
                             }
@@ -233,6 +252,19 @@ public abstract class MotionAutomaton_Ground extends RobotMotion {
                             running = false;
                             inMotion = false;
                             break;
+
+                        case USER_CONTROL:
+                            if(curKey.equals("forward")){
+                                straight(param.LINSPEED_MAX/2);
+                            } else if(curKey.equals("left")){
+                                turn(param.TURNSPEED_MAX/2, -25);
+                            } else if(curKey.equals("right")){
+                                turn(param.TURNSPEED_MAX/2, 25);
+                            } else if(curKey.equals("stop")){
+                                straight(0);
+                            }
+                            break;
+
                     }
 
                     prev = stage;
@@ -609,11 +641,11 @@ public abstract class MotionAutomaton_Ground extends RobotMotion {
     }
 
     protected enum STAGE {
-        INIT, ARCING, STRAIGHT, TURN, SMALLTURN, GOAL, UNABLE
+        INIT, ARCING, STRAIGHT, TURN, SMALLTURN, GOAL, UNABLE, USER_CONTROL
     }
 
     private enum OPMODE {
-        GO_TO, TURN_TO
+        GO_TO, TURN_TO, USER_CONTROL
     }
 
     // Collision avoidance

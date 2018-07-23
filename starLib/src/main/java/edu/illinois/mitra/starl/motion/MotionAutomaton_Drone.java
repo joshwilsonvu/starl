@@ -88,17 +88,25 @@ public abstract class MotionAutomaton_Drone extends RobotMotion {
     //	MotionParameters.Builder settings = new MotionParameters.Builder();
 
     /**
-     * Enables user control when called from App.
+     * Enables user control when called from App, ends based on destination not time.
      * @param dest -- Location of waypoint
-     * @param obs -- Location of obstacles
      */
     @Override
-    public final void userControl(ItemPosition dest, ObstacleList obs){
+    public final void userControl(ItemPosition dest){
         done = false;
         running = true;
         this.destination = new ItemPosition(dest);
         this.mode = OPMODE.USER_CONTROL;
         startMotion();
+    }
+
+    /**
+     * User Control that ends based on time length, not destination reached.
+     * @param timeLength -- amount of time user controls robot before ending.
+     */
+    @Override
+    public final void userControl(long timeLength){
+
     }
 
     @Override

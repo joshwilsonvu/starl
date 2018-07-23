@@ -57,7 +57,7 @@ MouseListener, MouseMotionListener, ExplicitlyDrawable, KeyListener
 	private static final RoundRectangle2D.Double out = new RoundRectangle2D.Double(40,30,10,20,15,15);
 	private RoundRectangle2D.Double colored_rect = null;
 
-	private String key;
+	private String key = "";
 	
 	private static RoundRectangle2D.Double rects[] = 
 	{

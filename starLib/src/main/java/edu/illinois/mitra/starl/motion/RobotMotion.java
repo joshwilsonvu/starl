@@ -58,9 +58,15 @@ public abstract class RobotMotion extends Thread implements Cancellable, Accepts
 	/**
 	 * Motion method called in App classes to enable user control of drones with the keyboard.
 	 * @param dest -- Location of waypoint
-	 * @param obs -- Location of obstacles
 	 */
-	public abstract void userControl(ItemPosition dest, ObstacleList obs);
+	public abstract void userControl(ItemPosition dest);
+
+
+	/**
+	 * Motion command for userControl that ends based on a time, not if a destination is reached.
+	 * @param timeLength -- amount of time user controls robot before ending.
+	 */
+	public abstract void userControl(long timeLength);
 
 
 
