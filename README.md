@@ -39,7 +39,7 @@ case "blue":
             this.type = ModelRegistry.create("Model_iRobot", name, 0, 0);
             break;
         case Common.MINIDRONE:
-            this.type = ModelRegistry.create("Model_quadcopter", name, 0, 0);
+            this.type = ModelRegistry.create("Model_Minidrone", name, 0, 0);
             break;
         case Common.PHANTOM:
             this.type = ModelRegistry.create("Model_Phantom", name, 0, 0);

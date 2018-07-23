@@ -10,7 +10,7 @@ public class Main {
 
         // Robots
         settings.BOTS("Model_iRobot").COUNT = 0;  //works in all increments
-        settings.BOTS("Model_quadcopter").COUNT = 0;  //Works unless multiple crash. ; Tuned
+        settings.BOTS("Model_Minidrone").COUNT = 0;  //Works unless multiple crash. ; Tuned
         settings.BOTS("Model_3DR").COUNT = 0;     //Works; Tuned
         settings.BOTS("Model_GhostAerial").COUNT = 0;   //Doesn't target correctly; Tuned. A little slow.
         settings.BOTS("Model_Mavic").COUNT = 1;   //Doesn't work, points switch without being hit; Tuned. A little slow.
