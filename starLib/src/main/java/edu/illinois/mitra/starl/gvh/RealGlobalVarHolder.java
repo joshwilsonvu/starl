@@ -45,11 +45,12 @@ public class RealGlobalVarHolder extends GlobalVarHolder {
 		plat.reachAvoid = new ReachAvoid(this);
 
 		ModelInterface modelInterface; // bluetooth interface
-		try {
-			modelInterface = plat.model.createModelInterface(this, context, mac);
-		} catch (InstantiationException | IllegalAccessException e) {
-			throw new IllegalArgumentException("Could not access bluetooth interface. ", e);
-		}
+        modelInterface = plat.model.createModelInterface(this, context, " 123");
+		//try {
+
+//		} catch (InstantiationException | IllegalAccessException e) {
+//			throw new IllegalArgumentException("Could not access bluetooth interface. ", e);
+//		}
 
 		if (initpos instanceof Model_Drone) {
 			plat.moat = new RealMotionAutomaton_Drone(this, (DroneInterface)modelInterface);
