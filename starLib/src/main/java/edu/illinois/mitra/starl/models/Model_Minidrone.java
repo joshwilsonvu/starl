@@ -60,8 +60,8 @@ public class Model_Minidrone extends Model_Drone {
 	public double max_yaw_speed() { return 200; }
 
 	@Override
-	public DroneInterface createModelInterface(GlobalVarHolder gvh, Context context, String mac) {
-		return new MiniDroneInterface(gvh, context, mac);
+	public DroneInterface createModelInterface(GlobalVarHolder gvh, Context context) {
+		return new MiniDroneInterface(gvh, context, "TODO PLACEHOLDER");
 	}
 
 	@Override
