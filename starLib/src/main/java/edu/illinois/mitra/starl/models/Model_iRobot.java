@@ -46,7 +46,7 @@ public class Model_iRobot extends Model_Ground {
 	public String ip() { return "10.255.24.0"; }
 
 	@Override
-	public GroundInterface createModelInterface(GlobalVarHolder gvh, Context context, String mac) {
-		return new IRobotInterface(gvh, mac);
+	public GroundInterface createModelInterface(GlobalVarHolder gvh, Context context) {
+		return new IRobotInterface(gvh, "TODO PLACEHOLDER");
 	}
 }

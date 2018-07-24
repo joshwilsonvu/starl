@@ -67,7 +67,7 @@ public abstract class Model_Ground extends Model {
     }
 
     @Override
-    public abstract GroundInterface createModelInterface(GlobalVarHolder gvh, Context context, String mac);
+    public abstract GroundInterface createModelInterface(GlobalVarHolder gvh, Context context);
 
     @Override
     public String toString() {

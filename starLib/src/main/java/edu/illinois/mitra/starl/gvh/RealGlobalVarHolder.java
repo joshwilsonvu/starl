@@ -44,13 +44,7 @@ public class RealGlobalVarHolder extends GlobalVarHolder {
 		plat.model = initpos;
 		plat.reachAvoid = new ReachAvoid(this);
 
-		ModelInterface modelInterface; // bluetooth interface
-        modelInterface = plat.model.createModelInterface(this, context, " 123");
-		//try {
-
-//		} catch (InstantiationException | IllegalAccessException e) {
-//			throw new IllegalArgumentException("Could not access bluetooth interface. ", e);
-//		}
+		ModelInterface modelInterface = plat.model.createModelInterface(this, context);
 
 		if (initpos instanceof Model_Drone) {
 			plat.moat = new RealMotionAutomaton_Drone(this, (DroneInterface)modelInterface);
@@ -59,15 +53,7 @@ public class RealGlobalVarHolder extends GlobalVarHolder {
 		} else {
 			throw new IllegalArgumentException("No known MotionAutomaton for type " + plat.model.getTypeName());
 		}
-/*
-//TD_NATHAN: resolve - resolved above
-        if(type == Common.IROBOT) {
-            plat.moat = new MotionAutomaton(this, new BluetoothInterface(this, robotMac.trim()));
-        }
-        else if(type == Common.MINIDRONE) {
-            plat.moat = new MotionAutomatonMiniDrone(this, new MiniDroneInterface(this, context, robotMac));
-        }
-*/
+
 		plat.moat.start();
 	}
 

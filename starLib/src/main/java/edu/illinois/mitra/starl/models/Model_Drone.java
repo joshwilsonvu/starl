@@ -33,7 +33,7 @@ public abstract class Model_Drone extends Model {
     public abstract double height(); // mm
 
     @Override
-    public abstract DroneInterface createModelInterface(GlobalVarHolder gvh, Context context, String mac);
+    public abstract DroneInterface createModelInterface(GlobalVarHolder gvh, Context context);
     public abstract PIDParams getPIDParams();
 
     // platform specific control parameters: see page 78 of http://www.msh-tools.com/ardrone/ARDrone_Developer_Guide.pdf
