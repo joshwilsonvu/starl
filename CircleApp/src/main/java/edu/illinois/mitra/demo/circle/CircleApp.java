@@ -50,7 +50,7 @@ public class CircleApp extends LogicThread {
         gvh.plat.moat.setParameters(param);
 
         le = new RandomLeaderElection(gvh);
-        sn = new BarrierSynchronizer(gvh);
+        sn = new BarrierSynchronizer(gvh,gvh.id.getParticipants().size());
 
         //n_waypoints = gvh.gps.getWaypointPositions().getNumPositions();
         //n_waypoints = Integer.MAX_VALUE;

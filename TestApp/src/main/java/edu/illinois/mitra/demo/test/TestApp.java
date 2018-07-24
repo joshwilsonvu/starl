@@ -113,7 +113,7 @@ public class TestApp extends LogicThread {
                         }
 
                         //Deals with log.
-                        gvh.log.i("DoReachAvoid", currentDestination.getX() + " " + currentDestination.getY());
+//                        gvh.log.i("DoReachAvoid", currentDestination.getX() + " " + currentDestination.getY());
                         doReachavoidCalls.update(new ItemPosition(name + "'s " + "doReachAvoid Call to destination: " + currentDestination.name, gvh.gps.getMyPosition().getX(), gvh.gps.getMyPosition().getY()));
                         System.out.println(name + " going to " + currentDestination.getName());
                         stage = Stage.GO;

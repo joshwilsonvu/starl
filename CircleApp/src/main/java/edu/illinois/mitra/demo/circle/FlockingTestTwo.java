@@ -41,7 +41,7 @@ public class FlockingTestTwo extends LogicThread {
         //gvh.trace.traceStart();
 
         le = new RandomLeaderElection(gvh);
-        sn = new BarrierSynchronizer(gvh);
+        sn = new BarrierSynchronizer(gvh,gvh.id.getParticipants().size());
 
         moat = gvh.plat.moat;
         MotionParameters.Builder settings = new MotionParameters.Builder();

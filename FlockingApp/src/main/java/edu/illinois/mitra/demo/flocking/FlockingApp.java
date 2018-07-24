@@ -61,7 +61,7 @@ public class FlockingApp extends LogicThread {
         le = new PickedLeaderElection(gvh);
 
         gvh.BotGroup = new RobotGroup(gvh.id.getName(), Common.numOFgroups);
-        sn = new BarrierSynchronizer(gvh);
+        sn = new BarrierSynchronizer(gvh,gvh.id.getParticipants().size());
 
         MotionParameters.Builder settings = new MotionParameters.Builder();
         settings = settings.ENABLE_ARCING(true);

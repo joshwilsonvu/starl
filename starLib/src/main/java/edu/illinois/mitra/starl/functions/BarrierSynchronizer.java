@@ -34,9 +34,9 @@ public class BarrierSynchronizer implements Synchronizer, MessageListener {
 	 * 
 	 * @param gvh The main GlobalVarHolder
 	 */
-	public BarrierSynchronizer(GlobalVarHolder gvh) {
+	public BarrierSynchronizer(GlobalVarHolder gvh, int n_participants) {
 		this.gvh = gvh;
-		n_participants = gvh.id.getParticipants().size();
+		this.n_participants = n_participants;
 		barriersNames = new HashMap<String,HashSet<String>>();
 		name = gvh.id.getName();
 		gvh.comms.addMsgListener(this, Common.MSG_BARRIERSYNC);
@@ -69,7 +69,7 @@ public class BarrierSynchronizer implements Synchronizer, MessageListener {
 	@Override
 	public boolean barrierProceed(String barrierID) {
 		try {
-			if(barriersNames.get(barrierID).size() == n_participants) {
+			if(barriersNames.get(barrierID).size() == (n_participants)) {
 				gvh.trace.traceEvent(TAG, "Barrier ready to proceed", barrierID, gvh.time());
 				gvh.log.i(TAG, "Barrier " + barrierID + " has all robots ready to proceed!");
 				barriersNames.remove(barrierID);

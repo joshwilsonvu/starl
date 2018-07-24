@@ -77,7 +77,7 @@ public class GroupTagApp extends LogicThread {
         gvh.trace.traceStart();
         gvh.log.i(TAG, "I AM " + name);
 
-        sync = new BarrierSynchronizer(gvh);
+        sync = new BarrierSynchronizer(gvh,gvh.id.getParticipants().size());
         le = new RandomLeaderElection(gvh);
 
         MotionParameters.Builder mp = new MotionParameters.Builder();

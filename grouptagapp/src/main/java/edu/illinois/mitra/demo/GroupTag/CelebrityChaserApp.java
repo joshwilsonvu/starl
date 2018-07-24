@@ -72,7 +72,7 @@ public class CelebrityChaserApp extends LogicThread implements MessageListener {
         // Make sure waypoints were provided
         if(gvh.gps.getWaypointPositions().getNumPositions() == 0) System.out.println("This application requires waypoints to travel to!");
 
-        sync = new BarrierSynchronizer(gvh);
+        sync = new BarrierSynchronizer(gvh,gvh.id.getParticipants().size());
         le = new RandomLeaderElection(gvh);
 
         MotionParameters.Builder settings = new MotionParameters.Builder();
