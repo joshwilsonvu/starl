@@ -341,17 +341,17 @@ public abstract class MotionAutomaton_Drone extends RobotMotion {
             return;
         }
 
-        //if (distance <= param.GOAL_RADIUS) {
-        //    System.out.println(">>>Distance: " + distance + " - GOAL_RADIUS " + param.GOAL_RADIUS);
-        //    next = STAGE.GOAL;
-        //} else {
+        if (distance <= param.GOAL_RADIUS) {
+            System.out.println(">>>Distance: " + distance + " - GOAL_RADIUS " + param.GOAL_RADIUS);
+            next = STAGE.GOAL;
+        } else {
             double thrustX = PID_x.getOutput(drone.getX(), destination.getX());
             double thrustY = PID_y.getOutput(drone.getY(), destination.getY());
             setXYThrust(thrustX, thrustY);
 
             //gvh.log.d("POSITION DEBUG", "My Position: " + drone.getX() + " " + drone.getY());
             //gvh.log.d("POSITION DEBUG", "Destination: " + destination.getX() + " " + destination.getY());
-        //}
+        }
     }
 
     private void stageHover(double distance) {

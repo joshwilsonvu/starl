@@ -117,7 +117,6 @@ public class TestApp extends LogicThread {
                         doReachavoidCalls.update(new ItemPosition(name + "'s " + "doReachAvoid Call to destination: " + currentDestination.name, gvh.gps.getMyPosition().getX(), gvh.gps.getMyPosition().getY()));
                         System.out.println(name + " going to " + currentDestination.getName());
                         stage = Stage.GO;
-
                     }
                     break;
 
@@ -190,7 +189,7 @@ public class TestApp extends LogicThread {
         else {
             //Must change format of keys in .wpt to match the return.
             String name = index + "-" + gvh.plat.model.getTypeName();
-            return (T) map.get((X)name);
+            return (T) map.remove((X)name);
         }
     }
 }
