@@ -1,7 +1,9 @@
 package edu.illinois.mitra.template;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -13,8 +15,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.XmlResourceParser;
 import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
+import android.util.Pair;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
@@ -30,6 +34,8 @@ import edu.illinois.mitra.starl.gvh.GlobalVarHolder;
 import edu.illinois.mitra.starl.gvh.RealGlobalVarHolder;
 import edu.illinois.mitra.starl.interfaces.LogicThread;
 import edu.illinois.mitra.starl.interfaces.MessageListener;
+import edu.illinois.mitra.starl.models.Model;
+import edu.illinois.mitra.starl.models.ModelRegistry;
 import edu.illinois.mitra.starl.models.Model_Drone;
 import edu.illinois.mitra.starl.objects.Common;
 import edu.illinois.mitra.starl.objects.HandlerMessage;
@@ -60,7 +66,7 @@ public class RobotsActivity extends Activity implements MessageListener {
 	private MainHandler mainHandler;
 	private WifiManager.MulticastLock multicastLock;
 
-	private BotInfoSelector[] botInfo;
+	private BotInfo[] botInfo;
 
 
 	@Override
@@ -84,28 +90,22 @@ public class RobotsActivity extends Activity implements MessageListener {
 		// Load the participants
 		//botInfo = IdentityLoader.loadIdentities(IDENTITY_FILE_URL);
 		botInfo = loadBotInfo();
+		// TODO remove
+		System.out.println(Arrays.deepToString(botInfo));
 
-		// Row 0 = names
-		// Row 1 = IPs
-		String[] participantNames = new String[botInfo.length];
-		String[] participantIPs = new String[botInfo.length];
-		for (int i = 0; i < botInfo.length; i++) {
-			participantNames[i] = botInfo[i].name;
-			participantIPs[i] = botInfo[i].ip;
-		}
 
 
 		// Initialize preferences holder
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		selectedRobot = prefs.getInt(PREF_SELECTED_ROBOT, 0);
 
-		if (selectedRobot >= participantNames.length) {
+		if (selectedRobot >= botInfo.length) {
 			Toast.makeText(this, "Identity error! Reselect robot identity", Toast.LENGTH_LONG).show();
 			selectedRobot = 0;
 		}
 
 		// Set up the GUI
-		setupGUI(participantNames); // names
+		setupGUI();
 
 		// Create the main handler
 		mainHandler = new MainHandler(this, pbBluetooth, pbBattery, cbGPS, cbBluetooth, cbRunning, txtDebug, cbRegistered);
@@ -119,10 +119,11 @@ public class RobotsActivity extends Activity implements MessageListener {
 
 		// Create the global variable holder
 		HashMap<String, String> hm_participants = new HashMap<String, String>();
-		for (int i = 0; i < participantNames.length; i++) {
-			hm_participants.put(participantNames[i], participantIPs[i]);
+		for (BotInfo info : botInfo) {
+			hm_participants.put(info.name, info.ip);
 		}
-		gvh = new RealGlobalVarHolder(participantNames[selectedRobot], hm_participants, botInfo[selectedRobot].model, mainHandler, this);
+		gvh = new RealGlobalVarHolder(botInfo[selectedRobot].name, hm_participants, botInfo[selectedRobot].typeName,
+				botInfo[selectedRobot].mac, mainHandler, this);
 		mainHandler.setGvh(gvh);
 
 		//Connect
@@ -203,7 +204,7 @@ public class RobotsActivity extends Activity implements MessageListener {
 	private ProgressBar pbBattery;
 
 
-	private void setupGUI(final String[] participantNames) {
+	private void setupGUI() {
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
 		txtRobotName = (TextView) findViewById(R.id.txtRobotName);
@@ -216,13 +217,18 @@ public class RobotsActivity extends Activity implements MessageListener {
 		pbBattery.setMax(100);
 		cbRegistered = (CheckBox) findViewById(R.id.cbRegistered);
 
-		if (!(botInfo[selectedRobot].model instanceof Model_Drone)) {
+		if (!ModelRegistry.isInstance(botInfo[selectedRobot].typeName, Model_Drone.class)) {
 			cbRegistered.setVisibility(View.GONE);
 		} else {
 			cbBluetooth.setText("Drone Connected");
 		}
 
-		txtRobotName.setText(participantNames[selectedRobot]);
+		final String[] participantNames = new String[botInfo.length];
+		for (int i = 0; i < participantNames.length; i++) {
+			participantNames[i] = botInfo[i].name;
+		}
+
+		txtRobotName.setText(botInfo[selectedRobot].name);
 		txtRobotName.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
 				AlertDialog.Builder sel_robot_builder = new AlertDialog.Builder(RobotsActivity.this);
@@ -258,7 +264,6 @@ public class RobotsActivity extends Activity implements MessageListener {
 			multicastLock.release();
 			multicastLock = null;
 		}
-		return;
 	}
 
 	@Override
@@ -277,15 +282,8 @@ public class RobotsActivity extends Activity implements MessageListener {
 	 * add color, robot model, and device model for each robot here
 	 * @return an array of BotInfoSelector objects representing tablet and robot info
 	 */
-	private BotInfoSelector[] loadBotInfo() {
-		// TODO: load bots.xml to determine which bots to use
-		return new BotInfoSelector[] {
-				new BotInfoSelector("blue", "Model_Phantom", Common.NEXUS7)
-				//, new BotInfoSelector("red", "Model_Mavic", Common.NEXUS7)
-				//, new BotInfoSelector("green", "Model_iRobot", Common.MOTOE)
-				//, new BotInfoSelector("blue", "Model_iRobot", Common.NEXUS7)
-				//, new BotInfoSelector("white", "Model_iRobot", Common.NEXUS7)
-		};
+	private BotInfo[] loadBotInfo() {
+		return new BotInfoLoader(this).loadBotInfo();
 	}
 
 }

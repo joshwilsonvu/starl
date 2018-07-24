@@ -138,7 +138,7 @@ public class FlockingApp extends LogicThread {
 
                             } else {
 
-                                // All other bots move to their place according to their order in the group
+                                // All other bot_info move to their place according to their order in the group
                                 System.out.println(gvh.id.getName() + " rank " + gvh.BotGroup.rank);
                                 int oldX = gvh.BotGroup.rank * 1000;
                                 int oldY = 0;

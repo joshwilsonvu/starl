@@ -6,10 +6,7 @@ import edu.illinois.mitra.starl.objects.Common;
 
 /**
  * Created by VerivitalLab on 3/9/2016.
- * This class contains all info for specific hardware addresses
- * Each tablet/phone and robot is assigned a color
- * This files specifies the phone/tablets' IP addresses, robot's names and bluetooth address
- * All addresses and names are based on the color, as you can see in the if statements below
+
  */
 public class BotInfoSelector {
 

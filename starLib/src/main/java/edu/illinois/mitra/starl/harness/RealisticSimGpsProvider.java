@@ -95,7 +95,7 @@ public class RealisticSimGpsProvider extends Observable implements SimGpsProvide
 	@Override
 	public synchronized void addRobot(Model bot) {
 		allpos.update(bot);
-		System.out.println("Tracking " + allpos.getNumPositions() + " bots.");
+		System.out.println("Tracking " + allpos.getNumPositions() + " bot_info.");
 
 		String typeName = bot.getTypeName();
 		synchronized(models) {

@@ -61,7 +61,7 @@ public class Model_3DR extends Model_Drone {
     public double max_yaw_speed() { return 200; }
 
     @Override
-    public DroneInterface createModelInterface(GlobalVarHolder gvh, Context context) {
+    public DroneInterface createModelInterface(GlobalVarHolder gvh, Context context, String mac) {
         return new o3DRController();
     }
 

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.os.Handler;
 import edu.illinois.mitra.starl.comms.SmartUdpComThread;
 import edu.illinois.mitra.starl.comms.UdpGpsReceiver;
+import edu.illinois.mitra.starl.models.ModelRegistry;
 import edu.illinois.mitra.starl.motion.RealMotionAutomaton_Drone;
 import edu.illinois.mitra.starl.motion.RealMotionAutomaton_Ground;
 import edu.illinois.mitra.starl.models.Model;
@@ -31,7 +32,7 @@ public class RealGlobalVarHolder extends GlobalVarHolder {
 	 * @param participants contains (name,IP) pairs for each participating agent
 	 * @param handler the main application handler capable of receiving GUI update messages
 	 */
-	public RealGlobalVarHolder(String name, Map<String,String> participants, Model initpos, Handler handler, Context context) {
+	public RealGlobalVarHolder(String name, Map<String,String> participants, String typeName, String robotMac, Handler handler, Context context) {
 //	public RealGlobalVarHolder(String name, Map<String,String> participants, Handler handler, String robotMac, Context context) {
 		super(name, participants);
 
@@ -41,14 +42,14 @@ public class RealGlobalVarHolder extends GlobalVarHolder {
 		super.comms = new Comms(this, new SmartUdpComThread(this));
 		//super.gps = new Gps(this, new UdpGpsReceiver(this,"192.168.1.100",4000,new PositionList(),new PositionList(), new ObstacleList(), new Vector<ObstacleList>(3,2) ));
 		super.gps = new Gps(this, new UdpGpsReceiver(this,"10.255.24.100",4000,new PositionList(),new PositionList<>(), new ObstacleList(), new Vector<ObstacleList>(3,2) ));
-		plat.model = initpos;
+		plat.model = ModelRegistry.create(typeName);
 		plat.reachAvoid = new ReachAvoid(this);
 
-		ModelInterface modelInterface = plat.model.createModelInterface(this, context);
+		ModelInterface modelInterface = plat.model.createModelInterface(this, context, robotMac);
 
-		if (initpos instanceof Model_Drone) {
+		if (plat.model instanceof Model_Drone) {
 			plat.moat = new RealMotionAutomaton_Drone(this, (DroneInterface)modelInterface);
-		} else if (initpos instanceof Model_Ground) {
+		} else if (plat.model instanceof Model_Ground) {
 			plat.moat = new RealMotionAutomaton_Ground(this, (GroundInterface)modelInterface);
 		} else {
 			throw new IllegalArgumentException("No known MotionAutomaton for type " + plat.model.getTypeName());

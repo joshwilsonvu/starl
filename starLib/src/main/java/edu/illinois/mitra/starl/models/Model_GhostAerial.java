@@ -60,8 +60,8 @@ public class Model_GhostAerial extends Model_Drone {
     public double max_yaw_speed() { return 200; }
 
     @Override
-    public DroneInterface createModelInterface(GlobalVarHolder gvh, Context context) {
-        return new GhostAerialInterface(gvh, context, "TODO PLACEHOLDER");
+    public DroneInterface createModelInterface(GlobalVarHolder gvh, Context context, String mac) {
+        return new GhostAerialInterface(gvh, context, mac);
     }
 
     @Override
