@@ -6,10 +6,7 @@ import edu.illinois.mitra.starl.objects.Common;
 
 /**
  * Created by VerivitalLab on 3/9/2016.
- * This class contains all info for specific hardware addresses
- * Each tablet/phone and robot is assigned a color
- * This files specifies the phone/tablets' IP addresses, robot's names and bluetooth address
- * All addresses and names are based on the color, as you can see in the if statements below
+
  */
 public class BotInfoSelector {
 
@@ -20,6 +17,7 @@ public class BotInfoSelector {
 
 
     public BotInfoSelector(String color, String typeName, int deviceType) {
+        // TODO: load bot_addresses.xml and device_addresses.xml to determine specific hardware addresses
         this.model = ModelRegistry.create(typeName, name, 0, 0);
         switch (color) {
             case "red":

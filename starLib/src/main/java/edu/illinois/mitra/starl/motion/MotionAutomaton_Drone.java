@@ -80,7 +80,6 @@ public abstract class MotionAutomaton_Drone extends RobotMotion {
 
     @Override
     public final void setParameters(MotionParameters param) {
-        // TODO Auto-generated method stub
         this.param = param;
     }
     //need to pass some more parameteres into this param

@@ -109,7 +109,7 @@ public class TestApp extends LogicThread {
                             kdTree = gvh.plat.reachAvoid.getKdTree();
                             gvh.plat.reachAvoid.doReachAvoid(gvh.gps.getMyPosition(), currentDestination, obs);
                         } else {
-                            gvh.plat.moat.userControl(currentDestination, obs);
+                            gvh.plat.moat.userControl(currentDestination);
                         }
 
                         //Deals with log.

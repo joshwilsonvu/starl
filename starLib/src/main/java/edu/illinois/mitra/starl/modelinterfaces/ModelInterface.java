@@ -9,5 +9,3 @@ public interface ModelInterface {
      */
     void disconnect();
 }
-
-// TODO make sure all ModelInterfaces have default constructor or get their correct dependencies

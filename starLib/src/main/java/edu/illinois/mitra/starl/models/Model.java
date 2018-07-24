@@ -49,7 +49,7 @@ public abstract class Model extends ItemPosition {
 	/**
 	 * Create the real interface for a particular model.
 	 */
-	public abstract ModelInterface createModelInterface(GlobalVarHolder gvh, Context context);
+	public abstract ModelInterface createModelInterface(GlobalVarHolder gvh, Context context, String mac);
 
 	public Model() {}
 
