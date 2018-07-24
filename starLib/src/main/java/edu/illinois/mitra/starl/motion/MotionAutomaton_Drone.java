@@ -173,8 +173,8 @@ public abstract class MotionAutomaton_Drone extends RobotMotion {
                     gvh.log.i("FailFlag", "write");
                     done = false;
                     motion_stop();
-                    //	land();
-                    //	stage = STAGE.LAND;
+                    land();
+                    stage = STAGE.LAND;
                 }
             }
             if (storeChanged) {
