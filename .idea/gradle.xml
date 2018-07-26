@@ -10,6 +10,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/ClientLib" />
             <option value="$PROJECT_DIR$/Mavlink" />
+            <option value="$PROJECT_DIR$/PilotFlockingApp" />
             <option value="$PROJECT_DIR$/arrowtravelapp" />
             <option value="$PROJECT_DIR$/circleapp" />
             <option value="$PROJECT_DIR$/distributedsearchapp" />
@@ -18,7 +19,6 @@
             <option value="$PROJECT_DIR$/grouptagapp" />
             <option value="$PROJECT_DIR$/lawnmowerapp" />
             <option value="$PROJECT_DIR$/mazeapp" />
-            <option value="$PROJECT_DIR$/olfati_saber" />
             <option value="$PROJECT_DIR$/projectapp" />
             <option value="$PROJECT_DIR$/raceApp" />
             <option value="$PROJECT_DIR$/starLSim" />

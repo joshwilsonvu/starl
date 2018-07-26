@@ -1,4 +1,4 @@
-package edu.illinois.mitra.demo.flocking;
+package edu.illinois.mitra.demo.pilot;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -16,10 +16,11 @@ public class FlockingDrawer extends Drawer {
 	
 	@Override
 	public void draw(LogicThread lt, Graphics2D g) {
-//		FlockingWithoutComms app = (FlockingWithoutComms) lt;
+		VeeFlockingApp app = (VeeFlockingApp) lt;
 
 		g.setColor(Color.RED);
-//		for(ItemPosition dest : app.destinations) {
+		for(ItemPosition dest : app.destinations) {
+			g.setColor(Color.RED);
 			g.fillRect(dest.getX() - 13, dest.getY() - 13, 26, 26);
 		}
 

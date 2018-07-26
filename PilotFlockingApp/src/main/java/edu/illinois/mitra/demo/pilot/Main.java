@@ -1,29 +1,27 @@
-package edu.illinois.mitra.demo.flocking;
+package edu.illinois.mitra.demo.pilot;
 
 import edu.illinois.mitra.starl.objects.Common;
 import edu.illinois.mitra.starlSim.main.SimSettings;
 import edu.illinois.mitra.starlSim.main.Simulation;
 
 
-
 public class Main {
-
 
 
     public static void main(String[] args) {
 
         SimSettings.Builder settings = new SimSettings.Builder();
 		// pick N reasonably large (> ~10) for rotations along arcs instead of going across middle always
-		settings.BOTS("Model_iRobot").COUNT = 7;
-		settings.TIC_TIME_RATE(5);
+		settings.BOTS("Model_iRobot").COUNT = 5;
+		settings.TIC_TIME_RATE(4);
         settings.WAYPOINT_FILE("flockingapp/waypoints/four.wpt");		//must specify relative directory
 		//settings.WAYPOINT_FILE(System.getProperty("user.dir")+"\\trunk\\android\\RaceApp\\waypoints\\four1.wpt");
 		settings.DRAW_WAYPOINTS(false);
 		settings.DRAW_WAYPOINT_NAMES(false);
-	//	settings.DRAWER(new FlockingDrawer());
+		settings.DRAWER(new FlockingDrawer());
 		
-	//	Simulation sim = new Simulation(FlockingWithoutComms.class, settings.build());
-	//	sim.start();
+		Simulation sim = new Simulation(VeeFlockingApp.class, settings.build());
+		sim.start();
 	}
 
 }

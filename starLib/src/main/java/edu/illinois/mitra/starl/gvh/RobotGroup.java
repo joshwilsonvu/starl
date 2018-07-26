@@ -5,50 +5,82 @@
 package edu.illinois.mitra.starl.gvh;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import edu.illinois.mitra.starl.objects.Common;
+import edu.illinois.mitra.starl.objects.ItemPosition;
 
 
 public class RobotGroup {
 
-    Integer groupNum;
-    public Double theta;
-    ArrayList<String> botLists;
+    private int groupNum;
+    private int rank;
+    private int rf = 1000;   //default
+    private double theta;
     public boolean setAfterBefore;
-    public String AfterBot;
-    public String BeforeBot;
-    public int rank;
-    public int rf;
     public boolean isLast;
+    private String afterBot;
+    private String beforeBot;
 
 
-    public RobotGroup(String id, Integer numOFgroup){
 
-        String intValue = id.replaceFirst("[^0-9]+", ""); // this will work for bots with sequential numbers in their names, not irobot0 quadrotor0
-        Integer i = Integer.parseInt(intValue);
-        groupNum = i % numOFgroup;
+    public RobotGroup(int id, Integer numGroups){
+        groupNum = id % numGroups;
         setAfterBefore= true;
         rank = 0;
         isLast= false;
 
-        double calcuateAngle = groupNum*(360/Common.numOFgroups);
-        if (Common.numOFgroups == 2 && groupNum ==1){
+        double calcuateAngle = groupNum*(360/numGroups);
+        if (numGroups == 2 && groupNum ==1){
             theta = Double.valueOf(90);
-
         }
-        else{
+        else {
             theta = calcuateAngle;
-
         }
-        // rf = 500* (groupNum+1);
 
-        rf = 1000;  //Has problems with lower values
-
-
-        System.out.println("This robot is "+id+ " and it is assigned to group number "+ getGroupNum().toString()+" and ts theta is "+ theta.toString());
+        System.out.printf("Robot: %d Group: %d Theta: %f \n",id,groupNum,theta);
     }
 
-    public Integer getGroupNum(){
+    public int getGroupNum(){
         return groupNum;
+    }
+
+    public int getRF(){
+        return rf;
+    }
+    public void setRF(int rf){
+        this.rf = rf;
+    }
+
+    public void setBeforeBot(String beforeBot){
+        this.beforeBot = beforeBot;
+    }
+
+    public void setAfterBot(String afterBot){
+        this.afterBot = afterBot;
+    }
+
+    public String getBeforeBot(){
+        return beforeBot;
+    }
+
+    public String getAfterBot(){
+        return afterBot;
+    }
+
+    public void setRank(int rank){
+        this.rank =rank;
+    }
+    public int getRank(){
+        return rank;
+    }
+
+    public void setTheta(double theta){
+        this.theta = theta;
+    }
+
+    public double getTheta(){
+        return theta;
     }
 }

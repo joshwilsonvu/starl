@@ -1,7 +1,8 @@
 
-/**
+*
  * Created by Mousa Almotairi on 4/28/2015.
- */
+
+
 
 
 package edu.illinois.mitra.demo.flocking;
@@ -29,10 +30,11 @@ import edu.illinois.mitra.starl.interfaces.LeaderElection;
 import edu.illinois.mitra.starl.interfaces.Synchronizer;
 import edu.illinois.mitra.starl.objects.PositionList;
 
-/**
+*
  * Created by Mousa Almotairi on 4/28/2015.
  * TODO: Fiz all num parse methods, set for iRobots currently. Once in formation, robots do not move smoothly
- */
+
+
 
 public class FlockingApp extends LogicThread {
 
@@ -60,7 +62,7 @@ public class FlockingApp extends LogicThread {
 
         le = new PickedLeaderElection(gvh);
 
-        gvh.BotGroup = new RobotGroup(gvh.id.getName(), Common.numOFgroups);
+        gvh.BotGroup = new RobotGroup(gvh.id.getIdNumber(), Common.numOFgroups);
         sn = new BarrierSynchronizer(gvh,gvh.id.getParticipants().size());
 
         MotionParameters.Builder settings = new MotionParameters.Builder();
@@ -114,9 +116,10 @@ public class FlockingApp extends LogicThread {
 
                         getRankings(robotNum,leaderNum, robotName);
                         // For Testing purpose
-                        /*for (int i=0; i<Common.numOFbots; i++){
+for (int i=0; i<Common.numOFbots; i++){
                             System.out.println("bot"+i+" and his before bot is "+Common.bots_neighbour[i][0]+" and his after bot is "+Common.bots_neighbour[i][1]+" and group distance is "+Common.bots_neighbour[i][2]);
-                        }*/
+                        }
+
 
                     }
                     break;
@@ -259,10 +262,11 @@ public class FlockingApp extends LogicThread {
                                 newY = newY + 150;
                                 //gvh.BotGroup.rf *= 1.25;
 
-                               /* System.out.println("Robot number is "+ robotNum);
+ System.out.println("Robot number is "+ robotNum);
                                 if (!Common.bots_neighbour[robotNum][2].equals("none")) {
                                     Common.bots_neighbour[robotNum][2] = String.valueOf(gvh.BotGroup.rf);
-                                }*/
+                                }
+
 
 
                             }
@@ -314,7 +318,6 @@ public class FlockingApp extends LogicThread {
         }
     }
 
-    /*
 	@Override
 	protected void receive(RobotMessage m) {
 		String posName = m.getContents(0);
@@ -325,7 +328,8 @@ public class FlockingApp extends LogicThread {
 			gvh.plat.moat.cancel();
 			stage = Stage.PICK;
 		}
-	}*/
+	}
+
 
     private static final Random rand = new Random();
 
