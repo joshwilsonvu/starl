@@ -1,10 +1,3 @@
-
-*
- * Created by Mousa Almotairi on 4/28/2015.
-
-
-
-
 package edu.illinois.mitra.demo.flocking;
 
 import java.util.Arrays;
@@ -30,10 +23,12 @@ import edu.illinois.mitra.starl.interfaces.LeaderElection;
 import edu.illinois.mitra.starl.interfaces.Synchronizer;
 import edu.illinois.mitra.starl.objects.PositionList;
 
-*
+/*
  * Created by Mousa Almotairi on 4/28/2015.
- * TODO: Fiz all num parse methods, set for iRobots currently. Once in formation, robots do not move smoothly
-
+ *
+ * Flocking app maintains vee formation as it rotates around middle, doesn't have translations.
+ * Relies on central bot list in common class to determine if flocking.
+ */
 
 
 public class FlockingApp extends LogicThread {
@@ -63,7 +58,7 @@ public class FlockingApp extends LogicThread {
         le = new PickedLeaderElection(gvh);
 
         gvh.BotGroup = new RobotGroup(gvh.id.getIdNumber(), Common.numOFgroups);
-        sn = new BarrierSynchronizer(gvh,gvh.id.getParticipants().size());
+        sn = new BarrierSynchronizer(gvh, gvh.id.getParticipants().size());
 
         MotionParameters.Builder settings = new MotionParameters.Builder();
         settings = settings.ENABLE_ARCING(true);
@@ -78,8 +73,6 @@ public class FlockingApp extends LogicThread {
         destinations.update(new ItemPosition(n, 2000, 2000, 0));
 
         le.elect();
-
-
 
 
     }
@@ -111,13 +104,13 @@ public class FlockingApp extends LogicThread {
                     if (le.getLeader() != null) {
                         System.out.printf("robot %3d, leader is: " + le.getLeader() + "\n", robotNum);
                         stage = STAGE.MOVE;
-                        leaderNum = le.getLeaderID();
-
-
-                        getRankings(robotNum,leaderNum, robotName);
-                        // For Testing purpose
-for (int i=0; i<Common.numOFbots; i++){
-                            System.out.println("bot"+i+" and his before bot is "+Common.bots_neighbour[i][0]+" and his after bot is "+Common.bots_neighbour[i][1]+" and group distance is "+Common.bots_neighbour[i][2]);
+                        if(initializeVee) {
+                            leaderNum = le.getLeaderID();
+                            getRankings(robotNum, leaderNum, robotName);
+                            // For Testing purpose
+                            for (int i = 0; i < Common.numOFbots; i++) {
+                                System.out.println("bot" + i + " and his before bot is " + Common.bots_neighbour[i][0] + " and his after bot is " + Common.bots_neighbour[i][1] + " and group distance is " + Common.bots_neighbour[i][2]);
+                            }
                         }
 
 
@@ -142,19 +135,19 @@ for (int i=0; i<Common.numOFbots; i++){
                             } else {
 
                                 // All other bot_info move to their place according to their order in the group
-                                System.out.println(gvh.id.getName() + " rank " + gvh.BotGroup.rank);
-                                int oldX = gvh.BotGroup.rank * 1000;
+                                System.out.println(gvh.id.getName() + " rank " + gvh.BotGroup.getRank());
+                                int oldX = gvh.BotGroup.getRank() * 1000;
                                 int oldY = 0;
 
                                 System.out.println(gvh.id.getName() + " " + oldX + " " + oldY);
 
-                                double newXX = oldX * Math.cos(Math.toRadians(gvh.BotGroup.theta)) - oldY * Math.sin(Math.toRadians(gvh.BotGroup.theta));
-                                double newYY = oldY * Math.cos(Math.toRadians(gvh.BotGroup.theta)) + oldX * Math.sin(Math.toRadians(gvh.BotGroup.theta));
+                                double newXX = oldX * Math.cos(Math.toRadians(gvh.BotGroup.getTheta())) - oldY * Math.sin(Math.toRadians(gvh.BotGroup.getTheta()));
+                                double newYY = oldY * Math.cos(Math.toRadians(gvh.BotGroup.getTheta())) + oldX * Math.sin(Math.toRadians(gvh.BotGroup.getTheta()));
 
                                 int newX = (int) newXX;
                                 int newY = (int) newYY;
 
-                                dest = new ItemPosition(n, newX, newY, gvh.BotGroup.theta.intValue());
+                                dest = new ItemPosition(n, newX, newY, (int)gvh.BotGroup.getTheta());
                                 gvh.plat.moat.goTo(dest);
                                 System.out.printf("%s Going to X:%d Y:%d \n", gvh.id.getName(), newX, newY);
 
@@ -165,12 +158,6 @@ for (int i=0; i<Common.numOFbots; i++){
 
                             initializeVee = false;
                         } else {
-
-
-                            // dest = new ItemPosition(n, newX, newY, gvh.BotGroup.theta.intValue());
-
-                            //gvh.plat.moat.goTo(dest);
-
 
                             //*********************** START: Rotation **********************
                             int newX = 0;
@@ -186,10 +173,10 @@ for (int i=0; i<Common.numOFbots; i++){
                             if (!gvh.id.getName().equals(le.getLeader())) {
                                 PositionList<ItemPosition> plAll = gvh.gps.get_robot_Positions();
                                 for (ItemPosition rp : plAll.getList()) {
-                                    if (rp.getName().equals(gvh.BotGroup.BeforeBot))
+                                    if (rp.getName().equals(gvh.BotGroup.getBeforeBot()))
                                         BeforeBot = rp;
                                     if (!gvh.BotGroup.isLast) {
-                                        if (rp.getName().equals(gvh.BotGroup.AfterBot))
+                                        if (rp.getName().equals(gvh.BotGroup.getAfterBot()))
                                             AfterBot = rp;
                                     }
 
@@ -197,23 +184,25 @@ for (int i=0; i<Common.numOFbots; i++){
                             }
 
 
-                            //  ****************** Rotation for the robot********************
-                            double newXX = gvh.gps.getMyPosition().getX() * Math.cos(Math.toRadians(-gvh.BotGroup.theta)) - gvh.gps.getMyPosition().getY() * Math.sin(Math.toRadians(-gvh.BotGroup.theta));
-                            double newYY = gvh.gps.getMyPosition().getY() * Math.cos(Math.toRadians(-gvh.BotGroup.theta)) + gvh.gps.getMyPosition().getX() * Math.sin(Math.toRadians(-gvh.BotGroup.theta));
-
+                              //****************** Rotation for the robot********************
+                            double newXX = rotate(gvh.gps.getMyPosition().getX(), gvh.gps.getMyPosition().getY(),-1, "x");
+                            double newYY = rotate(gvh.gps.getMyPosition().getX(), gvh.gps.getMyPosition().getY(),-1, "y");
                             newX = (int) newXX;
                             newY = (int) newYY;
 
+                            System.out.printf("Second %s X %d Y %d XX %f \n",gvh.id.getName(), newX,newY, newXX);
+
+
                             //******************** Rotation for robot before the Robot (Left Robot)**************
-                            double beforeXX = BeforeBot.getX() * Math.cos(Math.toRadians(-gvh.BotGroup.theta)) - BeforeBot.getY() * Math.sin(Math.toRadians(-gvh.BotGroup.theta));
-                            double beforeYY = BeforeBot.getY() * Math.cos(Math.toRadians(-gvh.BotGroup.theta)) + BeforeBot.getX() * Math.sin(Math.toRadians(-gvh.BotGroup.theta));
+                            double beforeXX = BeforeBot.getX() * Math.cos(Math.toRadians(-gvh.BotGroup.getTheta())) - BeforeBot.getY() * Math.sin(Math.toRadians(-gvh.BotGroup.getTheta()));
+                            double beforeYY = BeforeBot.getY() * Math.cos(Math.toRadians(-gvh.BotGroup.getTheta())) + BeforeBot.getX() * Math.sin(Math.toRadians(-gvh.BotGroup.getTheta()));
 
                             beforeX = (int) beforeXX;
                             beforeY = (int) beforeYY;
 
                             //******************** Rotation for robot after the Robot (right Robot)**************
-                            double afterXX = AfterBot.getX() * Math.cos(Math.toRadians(-gvh.BotGroup.theta)) - AfterBot.getY() * Math.sin(Math.toRadians(-gvh.BotGroup.theta));
-                            double afterYY = AfterBot.getY() * Math.cos(Math.toRadians(-gvh.BotGroup.theta)) + AfterBot.getX() * Math.sin(Math.toRadians(-gvh.BotGroup.theta));
+                            double afterXX = AfterBot.getX() * Math.cos(Math.toRadians(-gvh.BotGroup.getTheta())) - AfterBot.getY() * Math.sin(Math.toRadians(-gvh.BotGroup.getTheta()));
+                            double afterYY = AfterBot.getY() * Math.cos(Math.toRadians(-gvh.BotGroup.getTheta())) + AfterBot.getX() * Math.sin(Math.toRadians(-gvh.BotGroup.getTheta()));
 
 
                             afterX = (int) afterXX;
@@ -229,15 +218,18 @@ for (int i=0; i<Common.numOFbots; i++){
 
                                 //*********************** If Robot is the Rightmost (Last robot in the group)
                                 if (gvh.BotGroup.isLast) {
-                                    System.out.println(newX + " newX");
 
+                                    System.out.printf("name1 %s newX: %d newY %d before %s X: %d theta %f \n",gvh.id.getName(),newX,newY,gvh.BotGroup.getBeforeBot(),beforeX, gvh.BotGroup.getTheta());
 
-                                    newX = (beforeX + newX + gvh.BotGroup.rf) / 2;
+                                    newX = (beforeX + newX + 1000) / 2;
                                     newY = (beforeY + newY) / 2;
+
+                                    System.out.printf("name2 %s newX: %d newY %d beforeX %d \n",gvh.id.getName(),newX,newY,beforeX);
 
                                 } else {
 
                                     // ******************** If it is interior
+                                    System.out.printf("good1 %s newX: %d newY %d before %s X: %d theta %f \n",gvh.id.getName(),newX,newY,gvh.BotGroup.getBeforeBot(),beforeX, gvh.BotGroup.getTheta());
 
 
                                     newX = (beforeX + afterX) / 2;
@@ -256,38 +248,37 @@ for (int i=0; i<Common.numOFbots; i++){
 
                             //Once flocking, rotate by theta degrees
                             if (is_Flocking()) {
-                                gvh.BotGroup.theta = gvh.BotGroup.theta + 20;
+                                gvh.BotGroup.setTheta(gvh.BotGroup.getTheta() + 20);
 
                                 newX = newX + 100;
                                 newY = newY + 150;
                                 //gvh.BotGroup.rf *= 1.25;
 
- System.out.println("Robot number is "+ robotNum);
+                                System.out.println("Robot number is " + robotNum);
                                 if (!Common.bots_neighbour[robotNum][2].equals("none")) {
-                                    Common.bots_neighbour[robotNum][2] = String.valueOf(gvh.BotGroup.rf);
+                                    Common.bots_neighbour[robotNum][2] = String.valueOf(gvh.BotGroup.getRF());
                                 }
-
 
 
                             }
 
-                            //  System.out.println("Back Angle: " + robotName + " its new X coordinate is " + gvh.BotGroup.theta);
+                            //  System.out.println("Back Angle: " + robotName + " its new X coordinate is " + gvh.BotGroup.getTheta());
 
 
-                            newXX = newX * Math.cos(Math.toRadians(gvh.BotGroup.theta)) - newY * Math.sin(Math.toRadians(gvh.BotGroup.theta));
-                            newYY = newY * Math.cos(Math.toRadians(gvh.BotGroup.theta)) + newX * Math.sin(Math.toRadians(gvh.BotGroup.theta));
+                            newXX = newX * Math.cos(Math.toRadians(gvh.BotGroup.getTheta())) - newY * Math.sin(Math.toRadians(gvh.BotGroup.getTheta()));
+                            newYY = newY * Math.cos(Math.toRadians(gvh.BotGroup.getTheta())) + newX * Math.sin(Math.toRadians(gvh.BotGroup.getTheta()));
 
                             newX = (int) newXX;
                             newY = (int) newYY;
 
-                            //    System.out.println("Back Rotation: " + robotName + " its new X coordinate is " + newX + " and its new Y coordinate is " + newY + " and its order in groups is " + gvh.BotGroup.rank);
+                            //    System.out.println("Back Rotation: " + robotName + " its new X coordinate is " + newX + " and its new Y coordinate is " + newY + " and its order in groups is " + gvh.BotGroup.getRank());
                             // }
 
                             //*********************** END: Rotation   **********************
 
 
                             System.out.println(robotName + " has old coordination X " + gvh.gps.getMyPosition().getX() + " and Y " + gvh.gps.getMyPosition().getY() + " New X is " + newX + " and New Y is " + newY);
-                            dest = new ItemPosition(n, newX, newY, gvh.BotGroup.theta.intValue());
+                            dest = new ItemPosition(n, newX, newY,(int) gvh.BotGroup.getTheta());
                             destinations.update(dest);
 
                             gvh.plat.moat.goTo(dest);
@@ -318,17 +309,17 @@ for (int i=0; i<Common.numOFbots; i++){
         }
     }
 
-	@Override
-	protected void receive(RobotMessage m) {
-		String posName = m.getContents(0);
-		if(destinations.containsKey(posName))
-			destinations.remove(posName);
+    public double rotate(int x, int y, int direction, String axis){
+        if(axis.toLowerCase().equals("x")){
+            return (x * Math.cos(Math.toRadians(direction * gvh.BotGroup.getTheta())) - y * Math.sin(Math.toRadians(direction * gvh.BotGroup.getTheta())));
+        } else if(axis.toLowerCase().equals("y")) {
+            return (y * Math.cos(Math.toRadians(direction * gvh.BotGroup.getTheta())) + x * Math.sin(Math.toRadians(direction * gvh.BotGroup.getTheta())));
+        } else{
+            return -1;
+        }
+    }
 
-		if(currentDestination.getName().equals(posName)) {
-			gvh.plat.moat.cancel();
-			stage = Stage.PICK;
-		}
-	}
+
 
 
     private static final Random rand = new Random();
@@ -355,7 +346,7 @@ for (int i=0; i<Common.numOFbots; i++){
         boolean once = true;
         for (int i = 0; i < Common.numOFbots; i++) {
             if (!Common.bots_neighbour[i][2].equals("none")) {
-                groupDis = Integer.parseInt(Common.bots_neighbour[i][2]);
+                groupDis = gvh.BotGroup.getRF();
 
                 if (once) {
                     System.out.println("Reference distance between each group is " + groupDis);
@@ -378,11 +369,11 @@ for (int i=0; i<Common.numOFbots; i++){
 
                 }
                 System.out.println(Bot.name + " " + BeforeBot.name);
-                System.out.println(Bot.getX() + " X " +  BeforeBot.getX() + " " + Bot.getY() + " Y " + BeforeBot.getY());
+                System.out.println(Bot.getX() + " X " + BeforeBot.getX() + " " + Bot.getY() + " Y " + BeforeBot.getY());
 
                 // Distance between the bot and his before (left) neighbour
                 double botDistance = Math.sqrt((Bot.getX() - BeforeBot.getX()) * (Bot.getX() - BeforeBot.getX()) + (Bot.getY() - BeforeBot.getY()) * (Bot.getY() - BeforeBot.getY()));
-                System.out.println(botDistance + " Before " + (groupDis - groupDis * 0.3) + " " + (groupDis + groupDis * 0.3) );
+                System.out.println(botDistance + " Before " + (groupDis - groupDis * 0.3) + " " + (groupDis + groupDis * 0.3));
                 if (botDistance < (groupDis - groupDis * 0.3) || botDistance > (groupDis + groupDis * 0.3)) {
 
                     System.out.println("It is false because before bot is out of the range, their distance between each other is " + String.valueOf(botDistance));
@@ -393,7 +384,7 @@ for (int i=0; i<Common.numOFbots; i++){
                 if (!Common.bots_neighbour[i][1].equals("none")) {
                     double botDistanceAfter = Math.sqrt((Bot.getX() - AfterBot.getX()) * (Bot.getX() - AfterBot.getX()) + (Bot.getY() - AfterBot.getY()) * (Bot.getY() - AfterBot.getY()));
 
-                    System.out.println(botDistanceAfter + " After " + (groupDis - groupDis * 0.3) + " " + (groupDis + groupDis * 0.3) );
+                    System.out.println(botDistanceAfter + " After " + (groupDis - groupDis * 0.3) + " " + (groupDis + groupDis * 0.3));
                     if (botDistanceAfter < (groupDis - groupDis * 0.3) || botDistanceAfter > (groupDis + groupDis * 0.3)) {
                         System.out.println("It is false because after bot is out of the range, their distance between each other is " + String.valueOf(botDistance));
                         return false;
@@ -406,7 +397,7 @@ for (int i=0; i<Common.numOFbots; i++){
         return isFlocking;
     }
 
-    public void getRankings(int robotNum, int leaderNum, String robotName){
+    public void getRankings(int robotNum, int leaderNum, String robotName) {
         // All below code in Elect state is to assign order-rank- for each robot in its group
         if (robotNum != leaderNum) {
             if (gvh.BotGroup.setAfterBefore) {
@@ -428,12 +419,12 @@ for (int i=0; i<Common.numOFbots; i++){
                                     System.out.println("############************** There is potential same locations ***************########### " + robotName + " and " + rp.getName());
 
                                 if (mySummation >= otherSummation) {
-                                    if (gvh.BotGroup.BeforeBot == null) {
+                                    if (gvh.BotGroup.getBeforeBot() == null) {
                                         if (mySummation == otherSummation) {
                                             if (robotNum > Integer.valueOf(rp.getName().substring(6)))
-                                                gvh.BotGroup.BeforeBot = rp.getName();
+                                                gvh.BotGroup.setBeforeBot(rp.getName());
                                         } else
-                                            gvh.BotGroup.BeforeBot = rp.getName();
+                                            gvh.BotGroup.setBeforeBot(rp.getName());
 
                                     } else {
                                         int xSub = 0;
@@ -441,7 +432,7 @@ for (int i=0; i<Common.numOFbots; i++){
                                         // int angleSub = 0;
                                         PositionList<ItemPosition> plAllSub = gvh.gps.get_robot_Positions();
                                         for (ItemPosition rpSub : plAllSub.getList()) {
-                                            if (Integer.valueOf(rpSub.getName().substring(6)) == Integer.valueOf(gvh.BotGroup.BeforeBot.substring(6))) {
+                                            if (Integer.valueOf(rpSub.getName().substring(6)) == Integer.valueOf(gvh.BotGroup.getBeforeBot().substring(6))) {
                                                 xSub = rpSub.getX();
                                                 ySub = rpSub.getY();
                                                 //angleSub = rpSub.angle;
@@ -450,29 +441,29 @@ for (int i=0; i<Common.numOFbots; i++){
                                         }
                                         int beforeBotSummation = xSub + ySub;
                                         if (otherSummation > beforeBotSummation)
-                                            gvh.BotGroup.BeforeBot = rp.getName();
+                                            gvh.BotGroup.setBeforeBot(rp.getName());
                                     }
                                     if (mySummation == otherSummation) {
 
                                         System.out.println("############************** There is potential same locations ***************########### " + robotName + " and " + rp.getName());
                                         if (robotNum < Integer.valueOf(rp.getName().substring(6))) {
-                                            gvh.BotGroup.AfterBot = rp.getName();
+                                            gvh.BotGroup.setAfterBot(rp.getName());
                                         } else {
-                                            gvh.BotGroup.BeforeBot = rp.getName();
+                                            gvh.BotGroup.setBeforeBot(rp.getName());
                                             ranking++;
                                         }
                                     } else
                                         ranking++;
                                 } else if (mySummation < otherSummation)
-                                    if (gvh.BotGroup.AfterBot == null)
-                                        gvh.BotGroup.AfterBot = rp.getName();
+                                    if (gvh.BotGroup.getAfterBot() == null)
+                                        gvh.BotGroup.setAfterBot(rp.getName());
                                     else {
                                         int xSub = 0;
                                         int ySub = 0;
                                         // int angleSub = 0;
                                         PositionList<ItemPosition> plAllSub = gvh.gps.get_robot_Positions();
                                         for (ItemPosition rpSub : plAllSub.getList()) {
-                                            if (Integer.valueOf(rpSub.getName().substring(6)) == Integer.valueOf(gvh.BotGroup.AfterBot.substring(6))) {
+                                            if (Integer.valueOf(rpSub.getName().substring(6)) == Integer.valueOf(gvh.BotGroup.getAfterBot().substring(6))) {
                                                 xSub = rpSub.getX();
                                                 ySub = rpSub.getY();
                                                 //angleSub = rpSub.angle;
@@ -483,36 +474,37 @@ for (int i=0; i<Common.numOFbots; i++){
 
                                         if (otherSummation == afterBotSummation)
                                             if (robotNum < Integer.valueOf(rp.getName().substring(6)))
-                                                gvh.BotGroup.AfterBot = rp.getName();
+                                                gvh.BotGroup.setAfterBot(rp.getName());
 
                                         if (otherSummation < afterBotSummation)
-                                            gvh.BotGroup.AfterBot = rp.getName();
+                                            gvh.BotGroup.setAfterBot(rp.getName());
                                     }
                                 else if (Integer.valueOf(gvh.id.getName().substring(6)) > Integer.valueOf(rp.getName().substring(6))) {
-                                    gvh.BotGroup.BeforeBot = rp.getName();
+                                    gvh.BotGroup.setBeforeBot(rp.getName());
                                     ranking++;
-                                } else gvh.BotGroup.AfterBot = rp.getName();
+                                } else gvh.BotGroup.setAfterBot(rp.getName());
                             }
 
                         }
                     }
                 }
-                gvh.BotGroup.rank = ranking;
+                gvh.BotGroup.setRank(ranking);
                 gvh.BotGroup.setAfterBefore = false;
-                if (gvh.BotGroup.BeforeBot == null) {
+                if (gvh.BotGroup.getBeforeBot() == null) {
                     plAll = gvh.gps.get_robot_Positions();
                     for (ItemPosition rp : plAll.getList())
                         if (Integer.valueOf(rp.getName().substring(6)) == leaderNum)
-                            gvh.BotGroup.BeforeBot = rp.getName();
+                            gvh.BotGroup.setBeforeBot(rp.getName());
                 }
-                if (gvh.BotGroup.AfterBot == null)
+                if (gvh.BotGroup.getAfterBot() == null)
                     gvh.BotGroup.isLast = true;
 
-                Common.bots_neighbour[robotNum][0] = gvh.BotGroup.BeforeBot;
+                Common.bots_neighbour[robotNum][0] = gvh.BotGroup.getBeforeBot();
                 if (!gvh.BotGroup.isLast)
-                    Common.bots_neighbour[robotNum][1] = gvh.BotGroup.AfterBot;
+                    Common.bots_neighbour[robotNum][1] = gvh.BotGroup.getAfterBot();
                 else Common.bots_neighbour[robotNum][1] = "none";
-                Common.bots_neighbour[robotNum][2] = String.valueOf(gvh.BotGroup.rf);
+
+                Common.bots_neighbour[robotNum][2] = Integer.toString(gvh.BotGroup.getRF());
                 gvh.BotGroup.setAfterBefore = false;
             }
 

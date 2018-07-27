@@ -1,16 +1,19 @@
 package edu.illinois.mitra.demo.arrow;
 
-//Written by Lucas Buccafusca
-//05-31-2012
-//What the App does:
-//At the beginning of implementation, the robots are synced together to allow for communication between them.
-//A leader is chosen through a determined leader selection (bot0 will always be the leader)
-//The robots will then travel (while maintaining the arrow shape) to a series of waypoints
 
-//App not currently working, simplistic flocking formation based on going to waypoints without any
-//neighbour monitoring.
 
-import java.util.Arrays;
+/**
+ * Description:
+ *
+ * At the beginning of implementation, robots are synced together using a barrier synchronizer.
+ * A leader is chosen using picked leader election.
+ * The robots then travel (while maintaining the arrow shape) to a series of waypoints.
+ *
+ * Does not use neighbor monitoring, would use FlockingApp or PilotFlockingApp.
+ * @author Lucas Buccafusca
+ * @date 05-31-2012
+ */
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,44 +26,36 @@ import edu.illinois.mitra.starl.functions.PickedLeaderElection;
 import edu.illinois.mitra.starl.gvh.GlobalVarHolder;
 import edu.illinois.mitra.starl.interfaces.LeaderElection;
 import edu.illinois.mitra.starl.interfaces.LogicThread;
-import edu.illinois.mitra.starl.interfaces.MessageListener;
 import edu.illinois.mitra.starl.interfaces.Synchronizer;
 import edu.illinois.mitra.starl.motion.MotionParameters;
 import edu.illinois.mitra.starl.objects.ItemPosition;
 import edu.illinois.mitra.starl.objects.PositionList;
 import edu.illinois.mitra.starlSim.main.SimSettings;
 
-
-
-public class ArrowTravelApp extends LogicThread implements MessageListener {
+public class ArrowTravelApp extends LogicThread {
+    private static final String TAG = "Logic";
+    private int d_r=800;    //Some distance that each robot will be from the nearest robot
+    private double theta_r = Math.PI/4;     //0<theta_r<2*PI, theta_r != PI/2, 3*PI/2... Be wary of angles <PI/2.7
 
     SortedSet<ItemPosition> toVisit = new TreeSet<ItemPosition>();
     SortedSet<String> toVisit2 = new TreeSet<String>();
     SortedSet<String> arrived = new TreeSet<String>();
 
-    final Map<String, ItemPosition> destinations = new HashMap<String, ItemPosition>();
-    ItemPosition currentDestination;
+    final Map<String, ItemPosition> destinations = new HashMap<String, ItemPosition>();     //For Drawer
 
-    private static final String TAG = "Logic";
-
-    private ItemPosition destname = null;
-    private String leader = null;
-
+    private ItemPosition destname ;
+    private String leader ;
     private boolean running = true;
-
     private boolean iamleader = false;
+
     private SimSettings.Builder settings = new SimSettings.Builder();
     private LeaderElection le;
     private Synchronizer sync;
-    private int d_r=700; //Some distance that each robot will be from the nearest robot
-    private double theta_r=Math.PI/4; //0<theta_r<2*PI, theta_r != PI/2, 3*PI/2... Be wary of angles <PI/2.7
 
     String robotName = gvh.id.getName();
     Integer robotNum = gvh.id.getIdNumber();
 
-
     private final static String SYNC_START = "1";
-
 
     private enum STAGE { START, SYNC, LE, MOVE,WAYPOINT_CALC, WAYPOINT_TRAVEL, WAIT_TO_ARRIVE, DONE };
     private STAGE setup= STAGE.START;
@@ -73,7 +68,6 @@ public class ArrowTravelApp extends LogicThread implements MessageListener {
         // Get the list of position to travel to
         for(ItemPosition ip : gvh.gps.getWaypointPositions().getList()) {
             toVisit.add(ip);
-            destinations.put(ip.getName(),ip);
         }
 
         MotionParameters.Builder settings = new MotionParameters.Builder();
@@ -112,7 +106,6 @@ public class ArrowTravelApp extends LogicThread implements MessageListener {
                     PositionList<ItemPosition> plAll = gvh.gps.get_robot_Positions();
                     for (ItemPosition rp : plAll) {
                         arrived.add(rp.getName());
-                        System.out.println(arrived + " " + gvh.id.getName());
                     }
                     break;
                 case SYNC:
@@ -169,7 +162,7 @@ public class ArrowTravelApp extends LogicThread implements MessageListener {
 
                     motionSuccess = true;
                     while(gvh.plat.moat.inMotion) {
-                        gvh.sleep(10);
+                        gvh.sleep(100);
                         if(!toVisit2.contains(destname.getName())) {
                             motionSuccess = false;
                             break;
@@ -178,7 +171,7 @@ public class ArrowTravelApp extends LogicThread implements MessageListener {
 
                     // If Arrives
                     if(motionSuccess) {
-                        RobotMessage inform = new RobotMessage("ALL", name, 99, "bot"+robotNum);
+                        RobotMessage inform = new RobotMessage("ALL", name, 99, "irobot"+robotNum);
                         gvh.comms.addOutgoingMessage(inform);
                         arrived.remove(gvh.id.getName());
                         setup = STAGE.WAYPOINT_CALC;
@@ -198,14 +191,14 @@ public class ArrowTravelApp extends LogicThread implements MessageListener {
                         break;}
                     else{
                         setup=STAGE.WAYPOINT_CALC;
-                        gvh.sleep(10);
+                        gvh.sleep(100);
 
                     }
                     break;
 
 
                 case WAYPOINT_TRAVEL:
-                    gvh.sleep(10);
+                    gvh.sleep(100);
                     gvh.plat.moat.turnTo(newpoint());
                     gvh.sleep(2100);
                     if (arrived.isEmpty())
@@ -216,7 +209,7 @@ public class ArrowTravelApp extends LogicThread implements MessageListener {
                         gvh.plat.moat.goTo(newPoint);
                         while (gvh.plat.moat.inMotion)
                         {
-                            gvh.sleep(1);
+                            gvh.sleep(1000);
                         }
                         toVisit.remove(toVisit.first());
 
@@ -235,9 +228,10 @@ public class ArrowTravelApp extends LogicThread implements MessageListener {
                 case DONE:
                     System.out.println(name + " is done.");
                     gvh.plat.moat.motion_stop();
-                    return Arrays.asList(results);
+                    return null;
 
             }
+            sleep(1000);
 
 
 
@@ -292,8 +286,9 @@ public class ArrowTravelApp extends LogicThread implements MessageListener {
     private ItemPosition newpoint() {
 
         String robotName = gvh.id.getName();
-        Integer robotNum = Integer.parseInt(robotName.substring(6)); // assumes: botYYY
+        Integer robotNum = gvh.id.getIdNumber();
         destname = toVisit.first();
+        destinations.put(destname.getName(),destname);
 
         if(iamleader){
 

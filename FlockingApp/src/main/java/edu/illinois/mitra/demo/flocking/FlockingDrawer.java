@@ -16,10 +16,10 @@ public class FlockingDrawer extends Drawer {
 	
 	@Override
 	public void draw(LogicThread lt, Graphics2D g) {
-//		FlockingWithoutComms app = (FlockingWithoutComms) lt;
+		FlockingApp app = (FlockingApp) lt;
 
 		g.setColor(Color.RED);
-//		for(ItemPosition dest : app.destinations) {
+		for(ItemPosition dest : app.destinations) {
 			g.fillRect(dest.getX() - 13, dest.getY() - 13, 26, 26);
 		}
 

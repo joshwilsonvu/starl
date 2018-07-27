@@ -7,7 +7,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		SimSettings.Builder settings = new SimSettings.Builder();
-		settings.BOTS("Model_iRobot").COUNT = 3;
+		settings.BOTS("Model_iRobot").COUNT = 5;
 		settings.GPS_POSITION_NOISE(4);
 		settings.TIC_TIME_RATE(4);
         settings.WAYPOINT_FILE("grouptagapp/waypoints/tag.wpt");
@@ -18,7 +18,7 @@ public class Main {
 		settings.DRAWER(new TagDrawer());
 		settings.DRAW__ROBOT_TYPE(true);
 
-		Simulation sim = new Simulation(CelebrityChaserApp.class, settings.build());
+		Simulation sim = new Simulation(GroupTagApp.class, settings.build());
 		sim.start();
 	}
 

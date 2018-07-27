@@ -18,8 +18,8 @@ public final class Common {
 
 	// Specify the number of robots and number of groups
 
-	public static final Integer numOFbots = 10;
-	public static final Integer numOFgroups= 3;
+	public static final Integer numOFbots = 5;
+	public static final Integer numOFgroups= 2;
 	public static final Integer offsetDistance= 400;
 
     // Mobile device types

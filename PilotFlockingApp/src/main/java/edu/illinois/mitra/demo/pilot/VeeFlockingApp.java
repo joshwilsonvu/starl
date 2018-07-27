@@ -17,6 +17,8 @@ import edu.illinois.mitra.starl.motion.MotionParameters;
 import edu.illinois.mitra.starl.objects.ItemPosition;
 import edu.illinois.mitra.starl.objects.PositionList;
 
+//TODO: Change Flocking verification, relied on central list that each robot checked to see if flocking, try
+//      non-central list.
 public class VeeFlockingApp extends LogicThread {
     private int numGroups = 2;
     private int offsetDistance = 0;
@@ -150,8 +152,6 @@ public class VeeFlockingApp extends LogicThread {
                 oldY = -offsetDistance;
             }
 
-            System.out.println(gvh.BotGroup.getTheta() + " here " + oldY);
-
             double newXX = oldX * Math.cos(Math.toRadians(gvh.BotGroup.getTheta())) - oldY * Math.sin(Math.toRadians(gvh.BotGroup.getTheta()));
             double newYY = oldY * Math.cos(Math.toRadians(gvh.BotGroup.getTheta())) + oldX * Math.sin(Math.toRadians(gvh.BotGroup.getTheta()));
             int newX = (int) newXX;
@@ -192,7 +192,6 @@ public class VeeFlockingApp extends LogicThread {
 
         }
 
-        System.out.println(gvh.BotGroup.getBeforeBot() + " here " + gvh.BotGroup.getAfterBot());
         /*
         Method to find translation distance without knowing leader position by using current position and approximate distance to leader robot, based on rf and rank.
         Problem: Can find distance to lead drone, but can't find direction relative to origin, so not sure whether to add distance or subtract.
@@ -245,6 +244,7 @@ public class VeeFlockingApp extends LogicThread {
             newY += offsetDistance;
         }
 
+
         //Flocking
         if (!gvh.id.getName().equals(le.getLeader())) {
             //If Robot is the Rightmost (Last robot in the group)
@@ -256,8 +256,6 @@ public class VeeFlockingApp extends LogicThread {
                 newY = (beforeY + afterY) / 2;
             }
         }
-        System.out.printf("Flocking %s x %d y %d \n",gvh.id.getName(),newX,newY);
-
         if (is_Flocking()) {
             if (gvh.id.getName().equals(le.getLeader())) {
                 gvh.BotGroup.setTheta(gvh.BotGroup.getTheta() + 90);
@@ -266,6 +264,8 @@ public class VeeFlockingApp extends LogicThread {
                 //gvh.BotGroup.setTheta() = (gvh.BotGroup.getTheta() - Math.atan(beforeBotPositions[1].getY() / beforeBotPositions[1].getX()));
                 //gvh.BotGroup.setTheta() =gvh.BotGroup.getTheta() +30;
             }
+        } else{
+            System.out.println("not Flocking " + gvh.id.getName() );
         }
 
         //Add back offset
@@ -303,17 +303,16 @@ public class VeeFlockingApp extends LogicThread {
     public boolean is_Flocking() {
         boolean isFlocking = true;
 
-        ItemPosition BeforeBot = new ItemPosition("BeforeBot", 0, 0, 0);
+        ItemPosition BeforeBot;
         ItemPosition AfterBot = new ItemPosition("AfterBot", 0, 0, 0);
-        ItemPosition Bot = new ItemPosition("Bot", 0, 0, 0);
+        ItemPosition Bot;
 
-        int groupDis = 0;
+        int groupDis;
 
         boolean once = true;
         for (int i = 0; i < gvh.id.getParticipants().size(); i++) {
             if (i != leaderNum) {
                 groupDis = gvh.BotGroup.getRF();
-                PositionList<ItemPosition> plAll = gvh.gps.get_robot_Positions();
                 Bot = gvh.gps.getMyPosition();
                 BeforeBot = gvh.gps.getPosition(gvh.BotGroup.getBeforeBot());
 

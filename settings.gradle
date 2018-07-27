@@ -1,4 +1,4 @@
-include ':ClientLib', ':Mavlink', ':circleapp', ':PilotFlockingApp'
+include ':ClientLib', ':Mavlink', ':circleapp', ':PilotFlockingApp', ':celebritychaserapp', ':geocasttestapp', ':gpstestapp', ':trafficsignapp', ':lightpaintapp', ':lightpaintlibrary', ':lightpaintnew'
 include ':starLib', ':starlTemplate', ':starLSim'
 include ':FollowApp', ':RaceApp', ':circleapp', ':FlockingApp', ':ProjectApp', ':TestApp'
 include ':MazeApp', ':distributedsearchapp', ':arrowtravelapp',':grouptagapp', ':lawnmowerapp'

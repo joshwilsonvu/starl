@@ -12,12 +12,18 @@
             <option value="$PROJECT_DIR$/Mavlink" />
             <option value="$PROJECT_DIR$/PilotFlockingApp" />
             <option value="$PROJECT_DIR$/arrowtravelapp" />
+            <option value="$PROJECT_DIR$/celebritychaserapp" />
             <option value="$PROJECT_DIR$/circleapp" />
             <option value="$PROJECT_DIR$/distributedsearchapp" />
             <option value="$PROJECT_DIR$/flockingapp" />
             <option value="$PROJECT_DIR$/followApp" />
+            <option value="$PROJECT_DIR$/geocasttestapp" />
+            <option value="$PROJECT_DIR$/gpstestapp" />
             <option value="$PROJECT_DIR$/grouptagapp" />
             <option value="$PROJECT_DIR$/lawnmowerapp" />
+            <option value="$PROJECT_DIR$/lightpaintapp" />
+            <option value="$PROJECT_DIR$/lightpaintlibrary" />
+            <option value="$PROJECT_DIR$/lightpaintnew" />
             <option value="$PROJECT_DIR$/mazeapp" />
             <option value="$PROJECT_DIR$/projectapp" />
             <option value="$PROJECT_DIR$/raceApp" />
@@ -25,6 +31,7 @@
             <option value="$PROJECT_DIR$/starLib" />
             <option value="$PROJECT_DIR$/starlTemplate" />
             <option value="$PROJECT_DIR$/testapp" />
+            <option value="$PROJECT_DIR$/trafficsignapp" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

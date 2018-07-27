@@ -2,8 +2,8 @@ package edu.illinois.mitra.demo.follow;
 
 /**
  * Created by VerivitalLab on 2/26/2016.
- * This app was created to test the drones. The bot_info will each go to an assigned waypoint.
- * Once both bot_info have arrived at their respective waypoints, they will then go to the next waypoints.
+ * This app was created to test the drones. Robots will each go to a different waypoint and broadcast an arrived message.
+ * Once all robots have arrived at their respective waypoints and received a message from the others, they will go to the next waypoints.
  *
  * wpt files must have keys starting at 0-A and increasing numerically #-A
  */

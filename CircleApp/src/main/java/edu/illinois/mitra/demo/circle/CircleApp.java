@@ -17,7 +17,13 @@ import edu.illinois.mitra.starl.interfaces.LeaderElection;
 import edu.illinois.mitra.starl.interfaces.Synchronizer;
 import edu.illinois.mitra.starl.objects.PositionList;
 
-//TODO: Cleanup math.
+/**
+ * Simple circle flocking app, particpants form circle, move two waypoints in one direction, turn,
+ * then move two waypoints in other direction.
+ * TODO: Cleanup math. Add translation features.
+ */
+
+
 
 public class CircleApp extends LogicThread {
 

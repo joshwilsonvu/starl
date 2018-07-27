@@ -267,10 +267,12 @@ public class Simulation {
 		// does not modify this
 		if (pos == null)
 			return false;
-		final int minDistSq = (int)Math.ceil(Math.pow(BOT_SPACING_FACTOR * settings.BOT_RADIUS, 2));
+		startingPositions.put(pos.getName(), pos);
 		for (Entry<String, ItemPosition> entry : startingPositions.entrySet()) {
-			if (entry.getValue().getPos().subtract(pos.getPos()).magnitudeSq() < minDistSq)
-				return false;
+			if (!entry.getKey().equals(pos.getName())) {
+				if (entry.getValue().distanceTo(pos) < (BOT_SPACING_FACTOR * settings.BOT_RADIUS))
+					return false;
+			}
 		}
 		return true;
 	}

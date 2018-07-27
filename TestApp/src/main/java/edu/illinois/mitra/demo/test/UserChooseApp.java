@@ -15,7 +15,6 @@ import edu.illinois.mitra.starl.objects.PositionList;
  * This app allows the user to set a waypoint by right clicking on the desired spot. Only one destination
  * can be chosen at a time. Can also change between piloting and automatic control by changing USER_CONTROL boolean.
  *
- * TODO: Re-implement userControl interface
  */
 
 

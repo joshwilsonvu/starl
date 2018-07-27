@@ -20,7 +20,6 @@ import edu.illinois.mitra.starl.objects.PositionList;
  * or it can be changed to enable to the user to pilot one robot using the arrow keys.
  * Change USER_CONTROl to true for piloting, and false for automatic movement based on ReachAvoid.
  *
- * TODO: Re-implement User Interface in zoomable panel and motion classes.
  */
 
 public class TestApp extends LogicThread {

@@ -23,6 +23,11 @@ import edu.illinois.mitra.starl.motion.RobotMotion;
 import edu.illinois.mitra.starl.objects.ItemPosition;
 import edu.illinois.mitra.starl.objects.PositionList;
 
+/**
+ * App chooses leader who then chooses another robot to chase. Boundaries based on WayPoint file, should change to have
+ * boundaries be a parameter in the class.
+ */
+
 public class GroupTagApp extends LogicThread {
     private static final String TAG = "Logic";
     private static final String ERR = "Critical Error";
@@ -74,14 +79,14 @@ public class GroupTagApp extends LogicThread {
 
     public GroupTagApp(GlobalVarHolder gvh) {
         super(gvh);
-        gvh.trace.traceStart();
+//        gvh.trace.traceStart();
         gvh.log.i(TAG, "I AM " + name);
 
         sync = new BarrierSynchronizer(gvh,gvh.id.getParticipants().size());
         le = new RandomLeaderElection(gvh);
 
         MotionParameters.Builder mp = new MotionParameters.Builder();
-        mp = mp.COLAVOID_MODE(COLAVOID_MODE_TYPE.BUMPERCARS);   //buggy
+        mp = mp.COLAVOID_MODE(COLAVOID_MODE_TYPE.USE_COLAVOID);   //buggy
         mp = mp.STOP_AT_DESTINATION(false);
         MotionParameters param = mp.build();
         gvh.plat.moat.setParameters(param);

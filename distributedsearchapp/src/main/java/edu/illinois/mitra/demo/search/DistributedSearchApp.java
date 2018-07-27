@@ -13,6 +13,16 @@ import edu.illinois.mitra.starl.objects.*;
 import edu.illinois.mitra.starl.motion.*;
 import edu.illinois.mitra.starl.motion.MotionParameters.COLAVOID_MODE_TYPE;
 
+/**
+ * This application is to simulate a group of robots searching for something in the room.
+ * The object will be sensed if it is close to any robot and no obstacle is between robot and object
+ * We will do leader election, assign tasks, perform tasks, Inform others when finished
+ * The mutual exclusion on the overlapping path is not our focus in this app.
+ * The room coverage algorithm is not our focus in this app.
+ *
+ * Slightly buggy, robots go through walls.
+ */
+
 public class DistributedSearchApp extends LogicThread {
 
 	public static final int TASK_MSG = 21;
