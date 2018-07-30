@@ -13,5 +13,6 @@ android {
 dependencies {
     implementation project(':starLSim')
     implementation project(':starLib')
+    implementation project(':lightpaintlibrary')
 
 }

@@ -16,7 +16,7 @@ public class CircleDrawer extends Drawer {
 
     @Override
     public void draw(LogicThread lt, Graphics2D g) {
-        Circle app = (Circle) lt;
+        CircleApp app = (CircleApp) lt;
 
         g.setColor(Color.RED);
         for (ItemPosition pos : app.destinations) {
