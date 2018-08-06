@@ -4,7 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Set;
 
-import edu.illinois.mitra.lightpaint.geometry.ImageEdge;
+import edu.illinois.mitra.starl.lightpaint.library.geometry.ImageEdge;
 
 public class WptWriter {
 

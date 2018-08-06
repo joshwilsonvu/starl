@@ -1,13 +1,13 @@
 package edu.illinois.mitra.starl.lightpaint.library.algorithm;
 
+import org.jgrapht.alg.DijkstraShortestPath;
+
 import java.util.List;
 import java.util.Random;
 
-import org.jgrapht.alg.DijkstraShortestPath;
-
-import edu.illinois.mitra.lightpaint.geometry.ImageEdge;
-import edu.illinois.mitra.lightpaint.geometry.ImageGraph;
-import edu.illinois.mitra.lightpaint.geometry.ImagePoint;
+import edu.illinois.mitra.starl.lightpaint.library.geometry.ImageEdge;
+import edu.illinois.mitra.starl.lightpaint.library.geometry.ImageGraph;
+import edu.illinois.mitra.starl.lightpaint.library.geometry.ImagePoint;
 
 public class PrmPathFinder {
 	private static final int POINTS_TO_GENERATE = 100;

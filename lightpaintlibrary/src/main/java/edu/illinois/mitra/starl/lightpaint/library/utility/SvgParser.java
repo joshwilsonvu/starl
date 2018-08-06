@@ -14,8 +14,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import edu.illinois.mitra.lightpaint.geometry.ImageEdge;
-import edu.illinois.mitra.lightpaint.geometry.ImagePoint;
+import edu.illinois.mitra.starl.lightpaint.library.geometry.ImageEdge;
+import edu.illinois.mitra.starl.lightpaint.library.geometry.ImagePoint;
 
 public class SvgParser extends XmlReader {
 	private static final int DEFAULT_LINE_SIZE = 10;

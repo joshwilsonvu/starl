@@ -3,9 +3,10 @@ package edu.illinois.mitra.starl.lightpaint.library.utility;
 import java.util.HashSet;
 import java.util.Set;
 
-import edu.illinois.mitra.lightpaint.geometry.ImageEdge;
-import edu.illinois.mitra.lightpaint.geometry.ImagePoint;
 import edu.illinois.mitra.starl.gvh.GlobalVarHolder;
+import edu.illinois.mitra.starl.lightpaint.library.geometry.ImageEdge;
+import edu.illinois.mitra.starl.lightpaint.library.geometry.ImagePoint;
+import edu.illinois.mitra.starl.models.Model_Ground;
 import edu.illinois.mitra.starl.objects.ItemPosition;
 import edu.illinois.mitra.starl.objects.PositionList;
 
@@ -17,11 +18,11 @@ public class WptParser {
 		PositionList wpt = gvh.gps.getWaypointPositions();
 		ItemPosition pos;
 		while((pos = wpt.getPositionRegex(idx + "-A_[0-9]+")) != null) {
-			ImagePoint a = new ImagePoint(pos.getX(), pos.getY(), pos.getAngle(), getSizeFromName(pos.getName()));
+			ImagePoint a = new ImagePoint(pos.getX(), pos.getY(), (int)((Model_Ground)pos).getAngle(), getSizeFromName(pos.getName()));
 			pos = wpt.getPositionRegex(idx +"-B_[0-9]+");
 			if(pos == null)
 				return retval;
-			ImagePoint b = new ImagePoint(pos.getX(), pos.getY(), pos.getAngle(), getSizeFromName(pos.getName()));
+			ImagePoint b = new ImagePoint(pos.getX(), pos.getY(), (int)((Model_Ground)pos).getAngle(), getSizeFromName(pos.getName()));
 			retval.add(new ImageEdge(a,b));
 			idx ++;
 		}

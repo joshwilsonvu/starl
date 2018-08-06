@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
+
 <models>
     <!--
         This XML file selects from bot_addresses.xml and device_addresses.xml which
@@ -6,5 +9,5 @@
         Use the following layout:
         <model color="your_color" modeltype="your_model" devicetype="your_device"/>
     -->
-    <model color="red" modeltype="Model_iRobot" devicetype="MotoE"/>
+    <model color="green" modeltype="Model_Minidrone" devicetype="MotoE"/>
 </models>

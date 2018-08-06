@@ -34,11 +34,16 @@ public class MiniDroneInterface implements DroneInterface, ARDiscoveryServicesDe
     private static String TAG = "MiniDroneInterface";
 
 
+
+
     static
     {
+
+
+
         try
         {
-            System.loadLibrary("arsal");
+            /*System.loadLibrary("arsal");
             System.loadLibrary("arsal_android");
             System.loadLibrary("arnetworkal");
             System.loadLibrary("arnetworkal_android");
@@ -47,9 +52,19 @@ public class MiniDroneInterface implements DroneInterface, ARDiscoveryServicesDe
             System.loadLibrary("arcommands");
             System.loadLibrary("arcommands_android");
             System.loadLibrary("ardiscovery");
-            System.loadLibrary("ardiscovery_android");
+            System.loadLibrary("ardiscovery_android");*/
+
+            /*System.loadLibrary("ARCommands-3.9.0-sources");
+            System.loadLibrary("ARDiscovery-3.12.6-sources");
+            System.loadLibrary("ARNetwork-3.12.2-sources");
+            System.loadLibrary("ARNetworkAL-3.12.6-sources");
+            System.loadLibrary("ARSAL-3.12.6-sources");*/
 
             ARSALPrint.setMinimumLogLevel(ARSAL_PRINT_LEVEL_ENUM.ARSAL_PRINT_INFO);
+
+
+
+
 
         }
         catch (Exception e)

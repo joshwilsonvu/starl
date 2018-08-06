@@ -1,5 +1,6 @@
 package edu.illinois.mitra.starl.lightpaint.library.geometry;
 
+import edu.illinois.mitra.starl.models.Model_Ground;
 import edu.illinois.mitra.starl.objects.ItemPosition;
 
 public class ImagePoint {
@@ -28,7 +29,12 @@ public class ImagePoint {
 	}
 	
 	public static ImagePoint fromItemPosition(ItemPosition ip) {
-		return new ImagePoint(ip.x, ip.y, ip.getAngle(), Integer.parseInt(ip.getName()));
+		//TODO: Make sure Model Ground or change methods.
+		if(ip instanceof Model_Ground) {
+			return new ImagePoint(ip.getX(), ip.getY(), (int)((Model_Ground)ip).getAngle(), Integer.parseInt(ip.getName()));
+		} else {
+			throw new RuntimeException("Must be Model_Ground");
+		}
 	}
 
 	public static ImagePoint fromString(String s) {

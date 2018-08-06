@@ -32,6 +32,7 @@ import edu.illinois.mitra.starl.objects.ItemPosition;
 import edu.illinois.mitra.starl.objects.PositionList;
 import edu.illinois.mitra.starlSim.main.SimSettings;
 
+
 public class ArrowTravelApp extends LogicThread {
     private static final String TAG = "Logic";
     private int d_r=800;    //Some distance that each robot will be from the nearest robot

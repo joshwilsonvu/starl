@@ -3,10 +3,10 @@ package edu.illinois.mitra.starl.lightpaint.newapp;
 import java.io.*;
 import java.util.Set;
 
-import edu.illinois.mitra.lightpaint.activity.LightPaintActivity;
-import edu.illinois.mitra.lightpaint.geometry.ImageEdge;
-import edu.illinois.mitra.lightpaint.utility.SvgParser;
-import edu.illinois.mitra.lightpaint.utility.WptWriter;
+import edu.illinois.mitra.starl.lightpaint.library.activity.LightPaintActivity;
+import edu.illinois.mitra.starl.lightpaint.library.geometry.ImageEdge;
+import edu.illinois.mitra.starl.lightpaint.library.utility.SvgParser;
+import edu.illinois.mitra.starl.lightpaint.library.utility.WptWriter;
 import edu.illinois.mitra.starlSim.data.CsvWriter;
 import edu.illinois.mitra.starlSim.main.SimSettings;
 import edu.illinois.mitra.starlSim.main.Simulation;
@@ -55,8 +55,8 @@ public class Main {
 			SimSettings.Builder builder = new SimSettings.Builder().DRAWER(
 					new LightPaintDrawer(DRAW_REACHTUBES)).WAYPOINT_FILE(
 					WPT_PATH + inputFilename + ".wpt");
-			builder.N_BOTS(nbots);
-			builder.N_GBOTS(nbots);
+			builder.BOTS("Model_iRobot").COUNT =nbots;
+			builder.N_GOAL_BOTS(nbots);
 			builder.TIC_TIME_RATE(5);
 			builder.MAX_FPS(35);
 			builder.INITIAL_POSITIONS_FILE(WPT_PATH
@@ -68,7 +68,7 @@ public class Main {
 			SimSettings settings = builder.build();
 			for (int i = 1; i <= SAMPLES; i++) {
 				System.out.println("RUN " + i);
-				System.out.println("Starting with " + settings.N_BOTS
+				System.out.println("Starting with " + settings.BOTS.size()
 						+ " robots.");
 				Simulation sim = new Simulation(LightPaintActivity.class,
 						settings);

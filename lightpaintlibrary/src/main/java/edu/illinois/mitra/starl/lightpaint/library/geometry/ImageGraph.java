@@ -12,6 +12,8 @@ import org.jgrapht.EdgeFactory;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.Pseudograph;
 
+
+
 public class ImageGraph {
 	public static final EdgeFactory<ImagePoint, ImageEdge> IMAGE_EDGEFACTORY = new EdgeFactory<ImagePoint, ImageEdge>() {
 		@Override

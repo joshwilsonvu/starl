@@ -41,6 +41,14 @@ dependencies {
     implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.google.code.gson:gson:2.8.2'
 
+    //Parrot
+    /*implementation 'com.parrot:libARCommands-3.9.0'
+    implementation 'com.parrot:libARDiscovery-3.12.6'
+    implementation 'com.parrot:libARNetwork-3.12.2'
+    implementation 'com.parrot:libARNetworkAL-3.12.6'
+    implementation 'com.parrot:libARSAL-3.12.6'
+*/
+
     // for dji code
     implementation 'com.dji:dji-sdk:4.5.1'
     compileOnly 'com.dji:dji-sdk-provided:4.5.1'

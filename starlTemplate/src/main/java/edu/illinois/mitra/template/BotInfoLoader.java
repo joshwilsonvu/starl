@@ -43,6 +43,7 @@ public class BotInfoLoader {
      * @param context an Android context, in order to access resources
      */
     BotInfoLoader(Context context) {
+
         this.context = context;
     }
 
@@ -59,12 +60,14 @@ public class BotInfoLoader {
         // load all bot and device pairs to use
         readXml(R.xml.bot_info, new ParserTask() {
             public void run(XmlPullParser parser) throws XmlPullParserException, IOException {
+
                 BotInfoLoader.this.readInfo(parser);
             }
         });
         if (botInfoXmlEntries.isEmpty()) {
             return new BotInfo[0];
         }
+
 
         // load bot MAC addresses
         readXml(R.xml.bot_addresses, new ParserTask() {
@@ -101,6 +104,7 @@ public class BotInfoLoader {
             // null values if components not found
             retVal[i] = new BotInfo(name, entry.modelType, mac, entry.deviceType, ip);
         }
+
         return retVal;
     }
 
@@ -111,11 +115,18 @@ public class BotInfoLoader {
      * @param task the task that, given a parser, will process each tag
      */
     private void readXml(int file, ParserTask task) {
+
         try (XmlResourceParser parser = context.getResources().getXml(file)) {
-            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            parser.nextTag(); // go to first inner tag
+//            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+
             while (parser.next() != XmlResourceParser.END_TAG) {
-                task.run(parser);
+                if(parser.getEventType()==parser.START_TAG){
+                    task.run(parser);
+                }
+                else {
+                    parser.next();
+                }
+
             }
         } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
@@ -130,16 +141,16 @@ public class BotInfoLoader {
             modelType = parser.getAttributeValue(null, "modeltype");
             deviceType = parser.getAttributeValue(null, "devicetype");
         }
+
         if (color == null || modelType == null || deviceType == null) {
             throw new IllegalStateException("Bot info XML entries require color, modeltype, and " +
                     "devicetype attributes.");
         }
+
         if (!ModelRegistry.canCreate(modelType)) {
             throw new IllegalStateException(modelType + " is not a valid model type.");
         }
-        if (!parser.isEmptyElementTag()) {
-            throw new IllegalStateException("Bot info XML entries should be empty element tags.");
-        }
+
         parser.nextTag(); // exit self-closing tag
         botInfoXmlEntries.add(new BotInfoXmlEntry(color, modelType, deviceType));
     }
@@ -157,9 +168,15 @@ public class BotInfoLoader {
         if (parser.isEmptyElementTag()) {
             throw new IllegalStateException("Bot address XML entries should not be empty element tags.");
         }
+
         // record the MAC address
-        parser.nextText();
-        botAddresses.put(new BotInfoXmlEntry(color, modelType, null), parser.getText());
+        while (parser.getEventType() != parser.END_TAG){
+            if(parser.getEventType() == parser.TEXT){
+                botAddresses.put(new BotInfoXmlEntry(color, modelType, null), parser.getText());
+            }
+            parser.next();
+        }
+
         // exit the tag
         parser.nextTag();
     }
@@ -178,8 +195,14 @@ public class BotInfoLoader {
             throw new IllegalStateException("Bot address XML entries should not be empty element tags.");
         }
         // record the IP address
-        parser.nextText();
-        deviceAddresses.put(new BotInfoXmlEntry(color, null, devicetype), parser.getText());
+
+        while (parser.getEventType() != parser.END_TAG){
+            if(parser.getEventType() == parser.TEXT){
+                deviceAddresses.put(new BotInfoXmlEntry(color, null, devicetype), parser.getText());
+            }
+            parser.next();
+        }
+
         // exit the tag
         parser.nextTag();
     }
@@ -197,8 +220,13 @@ public class BotInfoLoader {
             throw new IllegalStateException("Bot address XML entries should not be empty element tags.");
         }
         // record the bot name
-        parser.nextText();
-        botNames.put(color, parser.getText());
+        while (parser.getEventType() != parser.END_TAG){
+            if(parser.getEventType() == parser.TEXT){
+                botNames.put(color, parser.getText());
+            }
+            parser.next();
+        }
+
         // exit the tag
         parser.nextTag();
     }

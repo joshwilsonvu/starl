@@ -1,4 +1,4 @@
-# StarL 1.5.1
+****# StarL 1.5.1
 
 https://wiki.cites.illinois.edu/wiki/display/MitraResearch/StarL
 
@@ -170,6 +170,7 @@ CelebrityChaserApp	    Chasing	        Similar to GroupTagApp, other robots try 
 FollowApp	            Testing     	Simpler version of circle app, robots go to separate points (points can be in any orientation, wait until all others arrive at their respective points, then continue. Used for testing or a template.
 TestApp	                Testing	        Basic app used for testing. Good for PID tuning. UserChooseApp in same folder, can set waypoints with right click, and enable piloting.
 RaceApp	                Testing         Basic app, robots go assigned waypoints. Good template for starting an app.
+
 
 Not Working
 

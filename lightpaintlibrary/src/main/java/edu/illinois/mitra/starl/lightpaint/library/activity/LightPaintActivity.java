@@ -11,9 +11,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import edu.illinois.mitra.lightpaint.algorithm.LpAlgorithm;
-import edu.illinois.mitra.lightpaint.geometry.ImagePoint;
-import edu.illinois.mitra.lightpaint.utility.WptParser;
 import edu.illinois.mitra.starl.comms.MessageContents;
 import edu.illinois.mitra.starl.comms.RobotMessage;
 import edu.illinois.mitra.starl.functions.BarrierSynchronizer;
@@ -23,6 +20,9 @@ import edu.illinois.mitra.starl.interfaces.LeaderElection;
 import edu.illinois.mitra.starl.interfaces.LogicThread;
 import edu.illinois.mitra.starl.interfaces.RobotEventListener;
 import edu.illinois.mitra.starl.lightpaint.library.algorithm.LpAlgorithm;
+import edu.illinois.mitra.starl.lightpaint.library.geometry.ImagePoint;
+import edu.illinois.mitra.starl.lightpaint.library.utility.WptParser;
+import edu.illinois.mitra.starl.models.Model_Ground;
 import edu.illinois.mitra.starl.motion.MotionParameters;
 import edu.illinois.mitra.starl.objects.Common;
 import edu.illinois.mitra.starl.objects.ItemPosition;
@@ -70,7 +70,7 @@ public class LightPaintActivity extends LogicThread implements RobotEventListene
 		gvh.comms.addMsgListener(this, ASSIGNMENT_ID, POSITION_UPDATE_ID, ASSIGNMENT_REQ_ID);
 
 		election = new RandomLeaderElection(gvh);
-		sync = new BarrierSynchronizer(gvh);
+		sync = new BarrierSynchronizer(gvh, gvh.id.getParticipants().size());
 
 		// Set up motion parameters
 		gvh.plat.moat.setParameters(motionParameters);
@@ -196,7 +196,12 @@ public class LightPaintActivity extends LogicThread implements RobotEventListene
 	}
 
 	private int getColorFromPosition(ItemPosition pos) {
-		return pos.getAngle();
+		//TODO: Make sure Model Ground or change methods.
+		if(pos instanceof Model_Ground) {
+			return (int) ((Model_Ground) pos).getAngle();
+		} else {
+			throw new RuntimeException("Must be Model_Ground");
+		}
 	}
 
 	private static int getSizeFromPosition(ItemPosition pos) {

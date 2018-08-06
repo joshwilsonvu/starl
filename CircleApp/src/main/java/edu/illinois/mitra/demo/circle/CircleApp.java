@@ -73,6 +73,8 @@ public class CircleApp extends LogicThread {
         while(true) {
             switch (stage) {
                 case START: {
+
+
                     sn.barrierSync("round" + count.toString());
                     stage = STAGE.SYNC;
 

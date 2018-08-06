@@ -29,7 +29,8 @@ public class BotInfoSelector {
                         break;
                     case Common.MOTOE:
                         //ip = "192.168.1.114"; // reserved IP address of red MotoE phone
-                        ip = "10.255.24.114";
+                        //ip = "10.255.24.114";
+                        ip = "10.66.78.85";
                         break;
                 }
                 break;
@@ -43,7 +44,8 @@ public class BotInfoSelector {
                         break;
                     case Common.MOTOE:
                         //ip = "192.168.1.115";
-                        ip = "10.255.24.115";
+                        //ip = "10.255.24.115";
+                        ip = "10.66.78.85";
                         break;
                 }
                 break;
@@ -51,13 +53,15 @@ public class BotInfoSelector {
             case "blue":
                 name = "bot2";
                 //ip = "192.168.1.112";
-                ip = "10.255.24.152";
+                //ip = "10.255.24.152";
+                ip = "10.66.78.85";
                 break;
 
             case "white":
                 name = "bot3";
                 //ip = "192.168.1.113";
-                ip = "10.255.24.113";
+                //ip = "10.255.24.113";
+                ip = "10.66.78.85";
                 break;
         }
     }

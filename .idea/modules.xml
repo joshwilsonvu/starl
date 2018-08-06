@@ -19,12 +19,14 @@
       <module fileurl="file://$PROJECT_DIR$/gpstestapp/gpstestapp.iml" filepath="$PROJECT_DIR$/gpstestapp/gpstestapp.iml" />
       <module fileurl="file://$PROJECT_DIR$/grouptagapp/grouptagapp.iml" filepath="$PROJECT_DIR$/grouptagapp/grouptagapp.iml" />
       <module fileurl="file://$PROJECT_DIR$/lawnmowerapp/lawnmowerapp.iml" filepath="$PROJECT_DIR$/lawnmowerapp/lawnmowerapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lib/lib.iml" filepath="$PROJECT_DIR$/lib/lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libs/libs.iml" filepath="$PROJECT_DIR$/libs/libs.iml" />
       <module fileurl="file://$PROJECT_DIR$/lightpaintapp/lightpaintapp.iml" filepath="$PROJECT_DIR$/lightpaintapp/lightpaintapp.iml" />
       <module fileurl="file://$PROJECT_DIR$/lightpaintlibrary/lightpaintlibrary.iml" filepath="$PROJECT_DIR$/lightpaintlibrary/lightpaintlibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/lightpaintnew/lightpaintnew.iml" filepath="$PROJECT_DIR$/lightpaintnew/lightpaintnew.iml" />
       <module fileurl="file://$PROJECT_DIR$/starLSim/starLSim.iml" filepath="$PROJECT_DIR$/starLSim/starLSim.iml" />
       <module fileurl="file://$PROJECT_DIR$/starLib/starLib.iml" filepath="$PROJECT_DIR$/starLib/starLib.iml" />
-      <module fileurl="file://$PROJECT_DIR$/starl.iml" filepath="$PROJECT_DIR$/starl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/starl-development.iml" filepath="$PROJECT_DIR$/starl-development.iml" />
       <module fileurl="file://$PROJECT_DIR$/starlTemplate/starlTemplate.iml" filepath="$PROJECT_DIR$/starlTemplate/starlTemplate.iml" />
       <module fileurl="file://$PROJECT_DIR$/trafficsignapp/trafficsignapp.iml" filepath="$PROJECT_DIR$/trafficsignapp/trafficsignapp.iml" />
     </modules>

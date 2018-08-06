@@ -87,11 +87,15 @@ public class RobotsActivity extends Activity implements MessageListener {
 		multicastLock.setReferenceCounted(true);
 		multicastLock.acquire();
 
+
+
+
 		// Load the participants
 		//botInfo = IdentityLoader.loadIdentities(IDENTITY_FILE_URL);
 		botInfo = loadBotInfo();
+
 		// TODO remove
-		System.out.println(Arrays.deepToString(botInfo));
+
 
 
 
@@ -106,6 +110,7 @@ public class RobotsActivity extends Activity implements MessageListener {
 
 		// Set up the GUI
 		setupGUI();
+
 
 		// Create the main handler
 		mainHandler = new MainHandler(this, pbBluetooth, pbBattery, cbGPS, cbBluetooth, cbRunning, txtDebug, cbRegistered);
@@ -122,9 +127,11 @@ public class RobotsActivity extends Activity implements MessageListener {
 		for (BotInfo info : botInfo) {
 			hm_participants.put(info.name, info.ip);
 		}
+
 		gvh = new RealGlobalVarHolder(botInfo[selectedRobot].name, hm_participants, botInfo[selectedRobot].typeName,
 				botInfo[selectedRobot].mac, mainHandler, this);
 		mainHandler.setGvh(gvh);
+
 
 		//Connect
 		connect();
@@ -205,6 +212,7 @@ public class RobotsActivity extends Activity implements MessageListener {
 
 
 	private void setupGUI() {
+
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
 		txtRobotName = (TextView) findViewById(R.id.txtRobotName);
@@ -216,6 +224,7 @@ public class RobotsActivity extends Activity implements MessageListener {
 		pbBattery = (ProgressBar) findViewById(R.id.pbBattery);
 		pbBattery.setMax(100);
 		cbRegistered = (CheckBox) findViewById(R.id.cbRegistered);
+
 
 		if (!ModelRegistry.isInstance(botInfo[selectedRobot].typeName, Model_Drone.class)) {
 			cbRegistered.setVisibility(View.GONE);
@@ -283,6 +292,7 @@ public class RobotsActivity extends Activity implements MessageListener {
 	 * @return an array of BotInfoSelector objects representing tablet and robot info
 	 */
 	private BotInfo[] loadBotInfo() {
+
 		return new BotInfoLoader(this).loadBotInfo();
 	}
 

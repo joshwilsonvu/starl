@@ -10,10 +10,10 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import edu.illinois.mitra.lightpaint.geometry.ImageEdge;
-import edu.illinois.mitra.lightpaint.geometry.ImageGraph;
-import edu.illinois.mitra.lightpaint.geometry.ImagePoint;
-import edu.illinois.mitra.lightpaint.utility.Utility;
+import edu.illinois.mitra.starl.lightpaint.library.geometry.ImageEdge;
+import edu.illinois.mitra.starl.lightpaint.library.geometry.ImageGraph;
+import edu.illinois.mitra.starl.lightpaint.library.geometry.ImagePoint;
+import edu.illinois.mitra.starl.lightpaint.library.utility.Utility;
 import edu.illinois.mitra.starl.objects.ItemPosition;
 
 /**
@@ -76,7 +76,7 @@ public class LpAlgorithm {
 	private static final List<ItemPosition> EMPTY_LIST = new ArrayList<ItemPosition>(0);
 
 	public synchronized List<ItemPosition> assignSegment(String currentRobot, ItemPosition robotPosition) {
-		List<ImagePoint> points = assignSegment(currentRobot, new ImagePoint(robotPosition.x, robotPosition.y));
+		List<ImagePoint> points = assignSegment(currentRobot, new ImagePoint(robotPosition.getX(), robotPosition.getY()));
 		if(points == null)
 			return EMPTY_LIST;
 

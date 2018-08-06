@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <names>
-    <name color="red">bot0</name>
-    <name color="green">bot1</name>
+    <name color="green">bot0</name>
+    <name color="red">bot1</name>
     <name color="blue">bot2</name>
     <name color="white">bot3</name>
 </names>
