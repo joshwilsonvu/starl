@@ -54,13 +54,8 @@ public class MiniDroneInterface implements DroneInterface, ARDiscoveryServicesDe
             System.loadLibrary("ardiscovery");
             System.loadLibrary("ardiscovery_android");*/
 
-            /*System.loadLibrary("ARCommands-3.9.0-sources");
-            System.loadLibrary("ARDiscovery-3.12.6-sources");
-            System.loadLibrary("ARNetwork-3.12.2-sources");
-            System.loadLibrary("ARNetworkAL-3.12.6-sources");
-            System.loadLibrary("ARSAL-3.12.6-sources");*/
 
-            ARSALPrint.setMinimumLogLevel(ARSAL_PRINT_LEVEL_ENUM.ARSAL_PRINT_INFO);
+           // ARSALPrint.setMinimumLogLevel(ARSAL_PRINT_LEVEL_ENUM.ARSAL_PRINT_INFO);
 
 
 

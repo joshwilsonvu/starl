@@ -78,12 +78,14 @@ public class TestApp extends LogicThread {
 
         int index = 1;
         for (ItemPosition i : gvh.gps.getWaypointPositions()) {
-            // allows using 1-Model_.+ suffix
+            System.out.println(i);
+
+            /*// allows using 1-Model_.+ suffix
             String name = index + "-" + gvh.plat.model.getTypeName();
             if (name.startsWith(i.getName())) {
                 destinations.put(name, i);
                 index++;
-            }
+            }*/
         }
 
 

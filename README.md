@@ -167,6 +167,7 @@ ProjectApp              Exploration	    An exploration app, uses RRT path findin
 DistributedSearchApp	Exploration	    iRobots search multiple rooms at once, slightly buggy, sometimes iRobots go through walls. Get-Started.pdf has better explanation.
 GroupTagApp	            Chasing	        Chosen leader tries to tag other robots, other robots avoid. Avoidance based on leader position.
 CelebrityChaserApp	    Chasing	        Similar to GroupTagApp, other robots try to follow leader. Followers learn position when leader reaches a point.
+TrafficSignApp	        Communication	Simulate traffic light, robots arrive, wait their turn, then proceed. Send messages and utilize mutual exclusion algorithm to determine order.
 FollowApp	            Testing     	Simpler version of circle app, robots go to separate points (points can be in any orientation, wait until all others arrive at their respective points, then continue. Used for testing or a template.
 TestApp	                Testing	        Basic app used for testing. Good for PID tuning. UserChooseApp in same folder, can set waypoints with right click, and enable piloting.
 RaceApp	                Testing         Basic app, robots go assigned waypoints. Good template for starting an app.
@@ -175,7 +176,6 @@ RaceApp	                Testing         Basic app, robots go assigned waypoints.
 Not Working
 
 Name	                Type	        Description
-TrafficSignApp	        Communication	Could be fixed relatively easily, algorithm ensures robots get through traffic light safely.
 FlockingWithoutComms	Flocking	    In ArrowTravelApp folder, experimental flocking app, doesn’t work.
 FlockingTestTwo	        Flocking	    Found under FlockingApp, needs a lot of work.
 GeoCastApp	            Testing	        Simple app to test geocasting, problem may be in the geocaster class.

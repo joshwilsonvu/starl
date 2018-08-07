@@ -37,12 +37,10 @@ public class TrafficSignDrawer extends Drawer {
 		else{
 			g.setColor(c[0]);
 		}
-		Iterator<ItemPosition> iterator = app.destinations.iterator();
-		while(iterator.hasNext()){
-			ItemPosition dest = (ItemPosition) iterator.next();
+		for (ItemPosition dest : app.destinations.values()) {
 			g.fillRect(dest.getX() - 13, dest.getY() - 13, 26, 26);
+			g.drawString(dest.name, dest.getX() + 30, dest.getY() - 20);
 		}
-		
 		g.setColor(Color.GRAY);
 		ObstacleList list = app.obEnvironment;
 		for(int i = 0; i < list.ObList.size(); i++)

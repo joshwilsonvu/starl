@@ -8,8 +8,8 @@ public class Main {
 	public static void main(String[] args) {
 		SimSettings.Builder settings = new SimSettings.Builder();
 
-		settings.BOTS("Model_iRobot").COUNT =5;
-		settings.TIC_TIME_RATE(2);
+		settings.BOTS("Model_iRobot").COUNT = 4;
+		settings.TIC_TIME_RATE(4);
 		settings.WAYPOINT_FILE("trafficsignapp/waypoints/dest.wpt");
 		settings.INITIAL_POSITIONS_FILE("trafficsignapp/waypoints/start.wpt");
 		settings.OBSPOINT_FILE("trafficsignapp/waypoints/Obstacles.wpt");
@@ -18,7 +18,7 @@ public class Main {
 		settings.DRAW_WAYPOINT_NAMES(false);
 		settings.DRAWER(new TrafficSignDrawer());
 
-        settings.TRACE_OUT_DIR("");
+        //settings.TRACE_OUT_DIR("");
         settings.USE_GLOBAL_LOGGER(true);
 
 //		settings.MSG_LOSSES_PER_HUNDRED(20);
