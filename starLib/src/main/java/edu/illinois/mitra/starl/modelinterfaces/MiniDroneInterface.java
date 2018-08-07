@@ -43,7 +43,7 @@ public class MiniDroneInterface implements DroneInterface, ARDiscoveryServicesDe
 
         try
         {
-            /*System.loadLibrary("arsal");
+            System.loadLibrary("arsal");
             System.loadLibrary("arsal_android");
             System.loadLibrary("arnetworkal");
             System.loadLibrary("arnetworkal_android");
@@ -52,10 +52,10 @@ public class MiniDroneInterface implements DroneInterface, ARDiscoveryServicesDe
             System.loadLibrary("arcommands");
             System.loadLibrary("arcommands_android");
             System.loadLibrary("ardiscovery");
-            System.loadLibrary("ardiscovery_android");*/
+            System.loadLibrary("ardiscovery_android");
 
 
-           // ARSALPrint.setMinimumLogLevel(ARSAL_PRINT_LEVEL_ENUM.ARSAL_PRINT_INFO);
+            ARSALPrint.setMinimumLogLevel(ARSAL_PRINT_LEVEL_ENUM.ARSAL_PRINT_INFO);
 
 
 
