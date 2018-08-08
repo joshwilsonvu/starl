@@ -91,7 +91,6 @@ public class MiniDroneInterface implements DroneInterface, ARDiscoveryServicesDe
 
 
     private void connect() {
-
         initBroadcastReceiver();
         initServiceConnection();
         onServicesDevicesListUpdated();
@@ -109,8 +108,7 @@ public class MiniDroneInterface implements DroneInterface, ARDiscoveryServicesDe
     // sets pitch to val percent of max angle
     // positive value moves forward, negative backward
     public void setPitch(double val) {
-        if (deviceController != null)
-        {
+        if (deviceController != null) {
             deviceController.setPitch((byte) val);
             deviceController.setFlag((byte)1);
         }
@@ -119,8 +117,7 @@ public class MiniDroneInterface implements DroneInterface, ARDiscoveryServicesDe
     // sets roll to val percent of max angle
     // positive value moves right, negative left
     public void setRoll(double val) {
-        if (deviceController != null)
-        {
+        if (deviceController != null) {
             deviceController.setRoll((byte) val);
             deviceController.setFlag((byte)1);
         }
@@ -129,16 +126,14 @@ public class MiniDroneInterface implements DroneInterface, ARDiscoveryServicesDe
     // sets yaw to val percent of max angular rotation
     // positive value turns right (clockwise from above), negative turns left
     public void setYaw(double val) {
-        if (deviceController != null)
-        {
+        if (deviceController != null) {
             deviceController.setYaw((byte) val);
         }
     }
 
     // moves the drone up (+ val) or down (- val)
     public void setThrottle(double val) {
-        if (deviceController != null)
-        {
+        if (deviceController != null) {
             deviceController.setGaz((byte) val);
         }
     }
@@ -151,34 +146,35 @@ public class MiniDroneInterface implements DroneInterface, ARDiscoveryServicesDe
     }
 
     public void sendLanding() {
-        if (deviceController != null)
-        {
+        if (deviceController != null) {
             deviceController.sendLanding();
         }
     }
 
     public void sendTakeoff() {
-        if (deviceController != null)
-        {
+        if (deviceController != null) {
             deviceController.sendTakeoff();
         }
     }
 
     // make the drone stop and fall to the ground
     public void sendEmergency() {
-        if (deviceController != null)
-        {
+        if (deviceController != null) {
             deviceController.sendEmergency();
         }
     }
 
     public void hover() {
         // setting this flag to 0 causes the drone to ignore roll/pitch commands and attempt to hover
-        deviceController.setFlag((byte)0);
+        if (deviceController != null) {
+            deviceController.setFlag((byte)0);
+        }
     }
 
     public void setMaxTilt(float maxTilt) {
-        deviceController.sendMaxTilt(maxTilt);
+        if (deviceController != null) {
+            deviceController.sendMaxTilt(maxTilt);
+        }
     }
 
     public void disconnect() {}
