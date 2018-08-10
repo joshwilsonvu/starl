@@ -207,7 +207,8 @@ public class SmartCommsHandler extends Thread {
 		if(to.equals("ALL") || to.equals("DISCOVER")) {
 			//return "192.168.1.255";
 			//return "10.255.24.255";
-			return "10.255.24.203";
+			//TODO: Shouldn't be hardcoded
+			return "10.255.24.209";
 		} else {
 			if(!participants.containsKey(to)) {
 				gvh.log.e(ERR, "Can't find IP address for robot " + to);

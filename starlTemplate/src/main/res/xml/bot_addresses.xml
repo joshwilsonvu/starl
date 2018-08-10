@@ -13,7 +13,6 @@
     <model color="blue" modeltype="Model_GhostAerial">98:D3:32:20:58:5B</model>
     <model color="white" modeltype="Model_iRobot">5C:F3:70:76:C9:D4</model>
     <model color="white" modeltype="Model_GhostAerial">98:D3:32:20:58:5B</model>
-    <!-- The Minidrone's controller does not use real MAC addresses. -->
     <model color="red" modeltype="Model_Minidrone">Mars_122139</model>
     <model color="green" modeltype="Model_Minidrone">green1</model>
     <model color="blue" modeltype="Model_Minidrone">Travis_064729</model>

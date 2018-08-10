@@ -29,18 +29,13 @@ import java.util.List;
 import edu.illinois.mitra.starl.gvh.GlobalVarHolder;
 import edu.illinois.mitra.starl.objects.HandlerMessage;
 
-public class MiniDroneInterface implements DroneInterface, ARDiscoveryServicesDevicesListUpdatedReceiverDelegate, DeviceControllerListener {
+public class MiniDroneInterface implements DroneInterface, ARDiscoveryServicesDevicesListUpdatedReceiverDelegate, DeviceControllerListener, dronediscoverer.Listener {
 
     private static String TAG = "MiniDroneInterface";
-
-
-
+    public dronediscoverer discover;
 
     static
     {
-
-
-
         try
         {
             System.loadLibrary("arsal");
@@ -54,13 +49,7 @@ public class MiniDroneInterface implements DroneInterface, ARDiscoveryServicesDe
             System.loadLibrary("ardiscovery");
             System.loadLibrary("ardiscovery_android");
 
-
             ARSALPrint.setMinimumLogLevel(ARSAL_PRINT_LEVEL_ENUM.ARSAL_PRINT_INFO);
-
-
-
-
-
         }
         catch (Exception e)
         {
@@ -84,21 +73,32 @@ public class MiniDroneInterface implements DroneInterface, ARDiscoveryServicesDe
     //private ConnectTask task;
     public MiniDroneInterface(GlobalVarHolder gvh, Context context, String mac) {
         this.context = context;
+        discover = new dronediscoverer(context);
         this.mac = mac;
         this.gvh = gvh;
         connect();
     }
 
+    @Override
+    public void onDronesListUpdated(List<ARDiscoveryDeviceService> dronesList) {
+
+    }
 
     private void connect() {
+       /* discover.setup();
+        discover.addListener(this);
+        discover.startDiscovering();*/
 
         initBroadcastReceiver();
         initServiceConnection();
         onServicesDevicesListUpdated();
         registerReceivers();
+
         initServices();
+
         //task = new ConnectTask();
         //task.execute();
+
     }
 
     private void stopScan() {
@@ -178,7 +178,9 @@ public class MiniDroneInterface implements DroneInterface, ARDiscoveryServicesDe
     }
 
     public void setMaxTilt(float maxTilt) {
-        deviceController.sendMaxTilt(maxTilt);
+        if (deviceController != null) {
+            deviceController.sendMaxTilt(maxTilt);
+        }
     }
 
     public void disconnect() {}
@@ -194,6 +196,7 @@ public class MiniDroneInterface implements DroneInterface, ARDiscoveryServicesDe
         }
         else
         {
+
             ardiscoveryService = ((ARDiscoveryService.LocalBinder) discoveryServiceBinder).getService();
             ardiscoveryServiceBound = true;
 
@@ -228,6 +231,7 @@ public class MiniDroneInterface implements DroneInterface, ARDiscoveryServicesDe
 
     private void initServiceConnection()
     {
+
         ardiscoveryServiceConnection = new ServiceConnection()
         {
             @Override
@@ -237,6 +241,9 @@ public class MiniDroneInterface implements DroneInterface, ARDiscoveryServicesDe
                 ardiscoveryService = ((ARDiscoveryService.LocalBinder) service).getService();
                 ardiscoveryServiceBound = true;
                 ardiscoveryService.start();
+
+                /*onServicesDevicesListUpdated();
+                System.out.println("ardiscovery started " + ardiscoveryService.getDeviceServicesArray());*/
             }
 
             @Override
@@ -268,17 +275,21 @@ public class MiniDroneInterface implements DroneInterface, ARDiscoveryServicesDe
 
         List<ARDiscoveryDeviceService> list;
 
-        if (ardiscoveryService != null)
-        {
+        if (ardiscoveryService != null) {
             list = ardiscoveryService.getDeviceServicesArray();
+            System.out.println("list " + list);
+
             if(list != null)
             {
                 for (ARDiscoveryDeviceService service : list)
                 {
+                    System.out.println("almost");
                     Log.d(TAG, "service :  "+ service);
                     if (service.getDevice() instanceof ARDiscoveryDeviceBLEService)
                     {
+                        System.out.println(service.getName() + " here " + mac);
                         if (service.getName().equals(mac)) {
+                            System.out.println("success");
                             // create a device controller
                             deviceController = new DeviceController(context, service);
                             deviceController.setListener(this);

@@ -2,13 +2,14 @@
 <devices>
     <!--
         This XML file holds the IP addresses for each available colored device.
+        Make sure device is on same wifi network as gps before setting ip address.
         Use the following layout:
         <device color="your_color" devicetype="your_type">your_ip_address</device>
     -->
-    <device color="red" devicetype="Nexus7">10.255.24.203</device>
+    <device color="red" devicetype="Nexus7">10.255.24.209</device>
     <device color="red" devicetype="MotoE">10.66.78.85</device>
     <device color="green" devicetype="Nexus7">10.66.78.85</device>
-    <device color="green" devicetype="MotoE">10.66.78.85</device>
+    <device color="green" devicetype="MotoE">10.255.24.209</device>
     <device color="blue" devicetype="Nexus7">10.255.24.152</device>
     <device color="blue" devicetype="MotoE">10.255.24.152</device>
     <device color="white" devicetype="Nexus7">10.255.24.113</device>
