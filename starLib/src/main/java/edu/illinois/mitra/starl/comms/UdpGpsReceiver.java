@@ -129,7 +129,7 @@ public class UdpGpsReceiver extends Thread implements GpsReceiver {
 		    				break;
 		    			case '$':
 		    				try {
-		    					Model newpos = ModelRegistry.create("Model_Phantom", part); //TODO(TIM) MAKE THIS APPLY TO ALL ROBOTS SUPER IMPORTANT
+		    					Model newpos = ModelRegistry.create("Model_Minidrone", part); //TODO(TIM) MAKE THIS APPLY TO ALL ROBOTS SUPER IMPORTANT
 		    					robotPositions.update(newpos, gvh.time());
 		    					gvh.sendRobotEvent(Event.GPS);
 		    					if(newpos.getName().equals(name)) {

@@ -177,8 +177,6 @@ public class BotInfoLoader {
             parser.next();
         }
 
-        // exit the tag
-        parser.nextTag();
     }
 
     // reads device_addresses.xml to determine which devices are available and their IP addresses
@@ -202,9 +200,6 @@ public class BotInfoLoader {
             }
             parser.next();
         }
-
-        // exit the tag
-        parser.nextTag();
     }
 
     // reads bot_names.xml to determine which names correspond to each color
@@ -227,8 +222,6 @@ public class BotInfoLoader {
             parser.next();
         }
 
-        // exit the tag
-        parser.nextTag();
     }
 
     /**

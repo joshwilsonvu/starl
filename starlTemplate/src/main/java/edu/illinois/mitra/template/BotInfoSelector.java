@@ -25,7 +25,7 @@ public class BotInfoSelector {
                 switch (deviceType) {
                     case Common.NEXUS7:
                         //ip = "192.168.1.110"; // reserved IP address of red Nexus7 tablet
-                        ip = "10.255.24.203";
+                        ip = "10.255.24.209";
                         break;
                     case Common.MOTOE:
                         //ip = "192.168.1.114"; // reserved IP address of red MotoE phone
