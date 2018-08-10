@@ -1,5 +1,7 @@
 package edu.illinois.mitra.starl.comms;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -107,6 +109,7 @@ public class UdpGpsReceiver extends Thread implements GpsReceiver {
 		    			case '@':
 		    				try {
 		    					ItemPosition newpos = new ItemPosition(part);
+		    					Log.d(TAG,"New Position " + parts + " " + newpos.toString());
 		    					waypointPositions.update(newpos, gvh.time());
 		    					gvh.trace.traceEvent(TAG, "Received Waypoint", newpos, gvh.time());
 		    				} catch(ItemFormattingException e){

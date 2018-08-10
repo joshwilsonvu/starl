@@ -1,5 +1,8 @@
 package edu.illinois.mitra.starl.harness;
 
+import android.nfc.Tag;
+import android.util.Log;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;

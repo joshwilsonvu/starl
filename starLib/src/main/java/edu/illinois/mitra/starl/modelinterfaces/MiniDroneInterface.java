@@ -272,19 +272,15 @@ public class MiniDroneInterface implements DroneInterface, ARDiscoveryServicesDe
 
         if (ardiscoveryService != null) {
             list = ardiscoveryService.getDeviceServicesArray();
-            System.out.println("list " + list);
 
             if(list != null)
             {
                 for (ARDiscoveryDeviceService service : list)
                 {
-                    System.out.println("almost");
                     Log.d(TAG, "service :  "+ service);
                     if (service.getDevice() instanceof ARDiscoveryDeviceBLEService)
                     {
-                        System.out.println(service.getName() + " here " + mac);
                         if (service.getName().equals(mac)) {
-                            System.out.println("success");
                             // create a device controller
                             deviceController = new DeviceController(context, service);
                             deviceController.setListener(this);

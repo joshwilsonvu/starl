@@ -3,6 +3,7 @@ package edu.illinois.mitra.template;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
@@ -50,6 +51,7 @@ public class MainHandler extends Handler {
 				Toast.makeText(appContext, msg.obj.toString(), Toast.LENGTH_LONG).show();
 				break;
 			case HandlerMessage.MESSAGE_LOCATION:
+				Log.d("Handler","Received Message Location");
 				cbGPS.setChecked((Integer) msg.obj == HandlerMessage.GPS_RECEIVING);
 				break;
 			case HandlerMessage.MESSAGE_BLUETOOTH:

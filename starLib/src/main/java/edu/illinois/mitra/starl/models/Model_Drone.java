@@ -1,6 +1,7 @@
 package edu.illinois.mitra.starl.models;
 
 import android.content.Context;
+import android.util.Log;
 
 import edu.illinois.mitra.starl.exceptions.ItemFormattingException;
 import edu.illinois.mitra.starl.gvh.GlobalVarHolder;
@@ -142,6 +143,8 @@ public abstract class Model_Drone extends Model {
                 .toVector3i();
 
         pos_p = getPos().add(delta);
+        Log.d("Model_Drone", "Predicting Position " + pos_p);
+
 
         double thrust;
         double pitchRad = Math.toRadians(getPitch());

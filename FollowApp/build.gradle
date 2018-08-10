@@ -11,6 +11,9 @@ android {
 }
 
 dependencies {
+
+    implementation files("$android_classpath")
+
     implementation project(':starLSim')
     implementation project(':starLib')
 
