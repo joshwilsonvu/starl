@@ -1,14 +1,16 @@
-****# StarL 1.5.1
-00000
+# StarL 1.5.1
 
-https://wiki.cites.illinois.edu/wiki/display/MitraResearch/StarL
+### Links
 
-https://www.verivital.slack.com
+[Javadocs](https://verivital-starl-undergrads.github.io/starl/)
 
-http://www.verivital.com/
+[Programming Abstractions for Distributed Robotics](https://wiki.cites.illinois.edu/wiki/display/MitraResearch/StarL)
 
-http://www.isis.vanderbilt.edu/
+[VeriVITAL](http://www.verivital.com/)
 
+[VeriVITAL Slack](https://www.verivital.slack.com)
+
+[Institute for Software Integrated Systems](http://www.isis.vanderbilt.edu/)
 
 ## Quick Start Guide
 ### Initiating the App Instance
@@ -28,38 +30,24 @@ dependencies {
 }
 ```
 ### Setting the Tablet and Drone Info
-Open `BotInfoSelector.java` and set the name and IP address for each colored
-robot. For example:
-```java
-...
-case "blue":
-    name = "bot2"; // this name has to match the one in MatLab for the color
-    ip = "10.255.24.152"; // ip address for the mobile device
-    switch (type) {
-        case Common.IROBOT:
-            this.type = ModelRegistry.create("Model_iRobot", name, 0, 0);
-            break;
-        case Common.MINIDRONE:
-            this.type = ModelRegistry.create("Model_Minidrone", name, 0, 0);
-            break;
-        case Common.PHANTOM:
-            this.type = ModelRegistry.create("Model_Phantom", name, 0, 0);
-            break;
-        case Common.GHOSTAERIAL:
-            this.type = ModelRegistry.create("Model_GhostAerial", name, 0, 0);
-            break;
-    }
-    break;
-...
+
+Open `bot_info.xml` under `starlTemplate/src/main/res/xml/`. Adjust the XML entries to select the
+color(s), bot(s), and device(s) used. For example:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<models>
+    <!--
+        This XML file selects from bot_addresses.xml and device_addresses.xml which
+        robots and devices are going to be used in the application.
+        Use the following layout:
+        <model color="your_color" modeltype="your_model" devicetype="your_device"/>
+    -->
+    <model color="green" modeltype="Model_Minidrone" devicetype="MotoE"/>
+</models>
 ```
-Then back in `RobotsActivity.java` in the `loadBotInfo()` method you can create each robot info 
-with the corresponding color:
-```java
-return new BotInfoSelector[] {
-        new BotInfoSelector("blue", "Model_Phantom", Common.NEXUS7)
-        //, other entries
-};
-```
+To change, add to, or remove from the available bots, modify the `bot_addresses.xml` file in the
+same directory. Likewise, to change, add to, or remove from the available devices, modify the
+`device_addresses.xml` file. The `bot_names.xml` file simply assigns names to each color.
 
 ### Configuring the MatLab "GPS"
 In `UdpGpsReceiver.java` you must set the incoming robot position data to be the right type of drone.
@@ -156,32 +144,33 @@ For further documentation or implementation clarification regarding the above dr
 
 See the `Documentation` folder for other materials on the framework.
 
-Updated 7/27/18
-Working Apps
 
-Name	                Type	        Description
-PilotFlockingApp        Flocking	    Expansion to FlockingApp, user pilots the leader, other robots follow, has translations so it can rotate around any point. Flocks can also be offset from each other.
-CircleApp	            Flocking	    Robots form circle, move two points in one direction, stop and rotate, then move in other direction.
-FlockingApp	            Flocking	    Robots form vee, then rotate about origin. Uses neighbor monitoring.
-ArrowTravelApp	        Flocking	    Simplistic flocking app that sets waypoints in a formation shape, no neighbor monitoring, PilotFlockingApp and FlockingApp are more in-depth.
-ProjectApp              Exploration	    An exploration app, uses RRT path finding algorithms, great visuals.
-DistributedSearchApp	Exploration	    iRobots search multiple rooms at once, slightly buggy, sometimes iRobots go through walls. Get-Started.pdf has better explanation.
-GroupTagApp	            Chasing	        Chosen leader tries to tag other robots, other robots avoid. Avoidance based on leader position.
-CelebrityChaserApp	    Chasing	        Similar to GroupTagApp, other robots try to follow leader. Followers learn position when leader reaches a point.
-TrafficSignApp	        Communication	Simulate traffic light, robots arrive, wait their turn, then proceed. Send messages and utilize mutual exclusion algorithm to determine order.
-FollowApp	            Testing     	Simpler version of circle app, robots go to separate points (points can be in any orientation, wait until all others arrive at their respective points, then continue. Used for testing or a template.
-TestApp	                Testing	        Basic app used for testing. Good for PID tuning. UserChooseApp in same folder, can set waypoints with right click, and enable piloting.
-RaceApp	                Testing         Basic app, robots go assigned waypoints. Good template for starting an app.
+### Working Apps
 
+Name | Type | Description
+---- | ---- | -----------
+PilotFlockingApp | Flocking | Expansion to FlockingApp, user pilots the leader, other robots follow, has translations so it can rotate around any point. Flocks can also be offset from each other.
+CircleApp | Flocking | Robots form circle, move two points in one direction, stop and rotate, then move in other direction.
+FlockingApp | Flocking | Robots form vee, then rotate about origin. Uses neighbor monitoring.
+ArrowTravelApp | Flocking | Simplistic flocking app that sets waypoints in a formation shape, no neighbor monitoring, PilotFlockingApp and FlockingApp are more in-depth.
+ProjectApp | Exploration | An exploration app, uses RRT path finding algorithms, great visuals.
+DistributedSearchApp | Exploration | iRobots search multiple rooms at once, slightly buggy, sometimes iRobots go through walls. Get-Started.pdf has better explanation.
+GroupTagApp | Chasing | Chosen leader tries to tag other robots, other robots avoid. Avoidance based on leader position.
+CelebrityChaserApp | Chasing | Similar to GroupTagApp, other robots try to follow leader. Followers learn position when leader reaches a point.
+TrafficSignApp | Communication | Simulate traffic light, robots arrive, wait their turn, then proceed. Send messages and utilize mutual exclusion algorithm to determine order.
+FollowApp | Testing | Simpler version of circle app, robots go to separate points (points can be in any orientation, wait until all others arrive at their respective points, then continue. Used for testing or a template.
+TestApp | Testing | Basic app used for testing. Good for PID tuning. UserChooseApp in same folder, can set waypoints with right click, and enable piloting.
+RaceApp | Testing | Basic app, robots go assigned waypoints. Good template for starting an app.
 
-Not Working
+### Not Working
 
-Name	                Type	        Description
-FlockingWithoutComms	Flocking	    In ArrowTravelApp folder, experimental flocking app, doesn’t work.
-FlockingTestTwo	        Flocking	    Found under FlockingApp, needs a lot of work.
-GeoCastApp	            Testing	        Simple app to test geocasting, problem may be in the geocaster class.
-LightPaintApp           lightPaint  	All libraries and apps have been downloaded, need to change gradle settings and check for out-of-date methods.
-LawnMowerApp	        Route Planning	Not quite sure about the purpose, very simple app.
+Name | Type | Description
+---- | ---- | -----------
+FlockingWithoutComms | Flocking | In ArrowTravelApp folder, experimental flocking app, doesn’t work.
+FlockingTestTwo | Flocking | Found under FlockingApp, needs a lot of work.
+GeoCastApp | Testing | Simple app to test geocasting, problem may be in the geocaster class.
+LightPaintApp | Light Painting | All libraries and apps have been downloaded, need to change gradle settings and check for out-of-date methods.
+LawnMowerApp | Route Planning | Not quite sure about the purpose, very simple app.
 
 
 
