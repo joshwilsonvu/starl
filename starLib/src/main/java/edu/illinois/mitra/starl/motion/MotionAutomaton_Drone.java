@@ -117,7 +117,7 @@ public abstract class MotionAutomaton_Drone extends RobotMotion {
     public void run() {
         gvh.threadCreated(this);
         // cannot call in constructor
-        setMaxTilt((float)drone.max_pitch_roll());
+            setMaxTilt((float)drone.max_pitch_roll());
 
         while(true) {
             //			gvh.gps.getObspointPositions().updateObs();
