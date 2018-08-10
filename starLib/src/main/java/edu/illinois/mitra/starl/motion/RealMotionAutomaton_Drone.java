@@ -20,7 +20,7 @@ public class RealMotionAutomaton_Drone extends MotionAutomaton_Drone {
     @Override
     protected void setControlInput(double yaw_v, double pitch, double roll, double gaz){
         bti.setControlInput(yaw_v, pitch, roll, gaz);
-        gvh.log.i(TAG, "control input as, yaw, pitch, roll, thrust " + yaw_v + ", " + pitch + ", " +roll + ", " +gaz);
+        gvh.log.d(TAG, "control input as, yaw, pitch, roll, thrust " + yaw_v + ", " + pitch + ", " +roll + ", " +gaz);
     }
 
     /**

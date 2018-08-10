@@ -67,13 +67,13 @@ public class Model_Minidrone extends Model_Drone {
 	@Override
 	public PIDParams getPIDParams() {
 		PIDParams p = new PIDParams();
-		p.Kp = 3E-4;//0.0714669809792096;
+		p.Kp = 1E-4;//0.0714669809792096;
 		p.Ki = 0.75*p.Kp;//0.0110786899216426;
-		p.Kd = 1.1E-3;//0.113205037832174;
+		p.Kd = 3E-4;//0.113205037832174;
 		p.saturationLimit = 50;
 		p.windUpLimit = 185;
 		p.filterLength = 8;
-		p.reversed = true;
+		p.reversed = false;
 		return p;
 	}
 }

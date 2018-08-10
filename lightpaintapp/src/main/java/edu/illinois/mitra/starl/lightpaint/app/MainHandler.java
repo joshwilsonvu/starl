@@ -3,6 +3,7 @@ package edu.illinois.mitra.starl.lightpaint.app;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 import edu.illinois.mitra.starl.gvh.GlobalVarHolder;
@@ -35,6 +36,7 @@ public class MainHandler extends Handler {
 			Toast.makeText(appContext, msg.obj.toString(), Toast.LENGTH_LONG).show();
 			break;
 		case HandlerMessage.MESSAGE_LOCATION:
+			Log.d("handler", "here");
 			cbGpsValue = (Integer) msg.obj == HandlerMessage.GPS_RECEIVING;
 			app.cbGPS.setChecked(cbGpsValue);
 			break;

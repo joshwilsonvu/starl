@@ -18,6 +18,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.XmlResourceParser;
 import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -143,6 +144,7 @@ public class RobotsActivity extends Activity implements MessageListener {
 		// Instantiate your application here!
 		// Example: runThread = new LightPaintActivity(gvh);
 		runThread = new FollowApp(gvh);
+		Log.d(TAG,"App created");
 	}
 
 	public void launch(int numWaypoints, int runNum) {

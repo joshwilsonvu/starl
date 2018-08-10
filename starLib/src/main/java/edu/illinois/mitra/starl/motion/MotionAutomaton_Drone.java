@@ -1,5 +1,7 @@
 package edu.illinois.mitra.starl.motion;
 
+import android.util.Log;
+
 import java.util.*;
 
 import edu.illinois.mitra.starl.gvh.GlobalVarHolder;
@@ -37,6 +39,7 @@ public abstract class MotionAutomaton_Drone extends RobotMotion {
     private final PIDController PID_y;
     private OPMODE mode = OPMODE.GO_TO;
     private volatile MotionParameters param = DEFAULT_PARAMETERS;
+
     public MotionAutomaton_Drone(GlobalVarHolder gvh) {
         super(gvh.id.getName());
         this.gvh = gvh;
@@ -45,6 +48,7 @@ public abstract class MotionAutomaton_Drone extends RobotMotion {
         PIDParams pidParams = drone.getPIDParams();
         PID_x = new PIDController(pidParams);
         PID_y = new PIDController(pidParams);
+
     }
 
     public final void goTo(ItemPosition dest, ObstacleList obsList) {
@@ -119,12 +123,13 @@ public abstract class MotionAutomaton_Drone extends RobotMotion {
         // cannot call in constructor
             setMaxTilt((float)drone.max_pitch_roll());
 
+
         while(true) {
             //			gvh.gps.getObspointPositions().updateObs();
             if(running) {
                 //System.out.printf("drone (%d, %d) \n", drone.getX(), drone.getY());
                 //System.out.printf("destination (%d, %d) \n", destination.getX(), destination.getY());
-                int distance = (int)drone.distanceTo2D(destination);
+                int distance = (int)gvh.gps.getMyPosition().distanceTo2D(destination);
                 //System.out.println("distance:" + distance);
 
                 boolean colliding = (stage != STAGE.LAND && drone.getGaz() < -50);
@@ -132,27 +137,35 @@ public abstract class MotionAutomaton_Drone extends RobotMotion {
                 if(!colliding && stage != null) {
                     switch(stage) {
                         case INIT:
+                            Log.d(TAG,"Init");
                             stageInit(distance);
                             break;
                         case MOVE:
+                            Log.d(TAG,"Move");
                             stageMove(distance);
                             break;
                         case HOVER:
+                            Log.d(TAG,"Hover");
                             stageHover(distance);
                             break;
                         case TAKEOFF:
+                            Log.d(TAG,"Takeoff");
                             stageTakeoff();
                             break;
                         case LAND:
+                            Log.d(TAG,"Land");
                             stageLand();
                             break;
                         case GOAL:
+                            Log.d(TAG,"Goal");
                             stageGoal();
                             break;
                         case STOP:
+                            Log.d(TAG,"Stop");
                             stageStop();
                             break;
                         case USER_CONTROL:
+                            Log.d(TAG,"UserCOntrol");
                             stageUserControl();
                             break;
                     }
@@ -315,7 +328,7 @@ public abstract class MotionAutomaton_Drone extends RobotMotion {
         PID_y.reset();
 //                            setMaxTilt(2.5f); // TODO: add max tilt to motion parameters class
 
-        if(drone.getZ() < safeHeight){
+        if(gvh.gps.getMyPosition().getZ() < safeHeight){
             // just a safe distance from ground
             takeOff();
             next = STAGE.TAKEOFF;
@@ -334,7 +347,7 @@ public abstract class MotionAutomaton_Drone extends RobotMotion {
     }
 
     private void stageMove(double distance) {
-        if (drone.getZ() < safeHeight){
+        if (gvh.gps.getMyPosition().getZ() < safeHeight){
             // just a safe distance from ground
             takeOff();
             next = STAGE.TAKEOFF;
@@ -345,8 +358,8 @@ public abstract class MotionAutomaton_Drone extends RobotMotion {
             System.out.println(">>>Distance: " + distance + " - GOAL_RADIUS " + param.GOAL_RADIUS);
             next = STAGE.GOAL;
         } else {
-            double thrustX = PID_x.getOutput(drone.getX(), destination.getX());
-            double thrustY = PID_y.getOutput(drone.getY(), destination.getY());
+            double thrustX = PID_x.getOutput(gvh.gps.getMyPosition().getX(), destination.getX());
+            double thrustY = PID_y.getOutput(gvh.gps.getMyPosition().getY(), destination.getY());
             setXYThrust(thrustX, thrustY);
 
             //gvh.log.d("POSITION DEBUG", "My Position: " + drone.getX() + " " + drone.getY());
@@ -360,14 +373,15 @@ public abstract class MotionAutomaton_Drone extends RobotMotion {
         if(distance <= param.GOAL_RADIUS) {
             hover();
         } else{
-            double thrustX = PID_x.getOutput(drone.getX(), destination.getX());
-            double thrustY = PID_y.getOutput(drone.getY(), destination.getY());
+            double thrustX = PID_x.getOutput(gvh.gps.getMyPosition().getX(), destination.getX());
+            double thrustY = PID_y.getOutput(gvh.gps.getMyPosition().getY(), destination.getY());
             setXYThrust(thrustX, thrustY);
         }
     }
 
     private void stageTakeoff() {
-        switch(drone.getZ()/(safeHeight/2)){
+        Log.d(TAG, "Z position: " + gvh.gps.getMyPosition().getZ());
+        switch(gvh.gps.getMyPosition().getZ()/(safeHeight/2)){
             case 0:// 0 - 1/2 safeHeight
                 storeGaz(1);
                 break;
@@ -376,19 +390,13 @@ public abstract class MotionAutomaton_Drone extends RobotMotion {
                 break;
             default: // above safeHeight:
                 hover();
-                if(prev != null){
-                    next = prev;
-                }
-                else{
-                    System.out.println("hover");
-                    next = STAGE.HOVER;
-                }
+                next = STAGE.INIT;
                 break;
         }
     }
 
     private void stageLand() {
-        switch(drone.getZ()/(safeHeight/2)){
+        switch(gvh.gps.getMyPosition().getZ()/(safeHeight/2)){
             case 0:// 0 - 1/2 safeHeight
                 storeGaz(0);
                 next = STAGE.STOP;
@@ -403,7 +411,7 @@ public abstract class MotionAutomaton_Drone extends RobotMotion {
     }
 
     private void stageGoal() {
-        System.out.println("Done flag");
+        Log.d(TAG,"At Goal");
         done = true;
         gvh.log.i(TAG, "At goal!");
         gvh.log.i("DoneFlag", "write");

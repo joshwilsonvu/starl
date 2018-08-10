@@ -9,6 +9,8 @@ package edu.illinois.mitra.demo.follow;
  */
 
 
+import android.util.Log;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -33,6 +35,7 @@ public class FollowApp extends LogicThread {
     private boolean arrived = false;
     private boolean goForever = true;
     private int msgNum = 0;
+    private boolean loaded = false;
     private HashSet<RobotMessage> receivedMsgs = new HashSet<RobotMessage>();
 
     final Map<String, ItemPosition> destinations = new HashMap<String, ItemPosition>();
@@ -58,18 +61,28 @@ public class FollowApp extends LogicThread {
         gvh.comms.addMsgListener(this, ARRIVED_MSG);
         destIndex = gvh.id.getIdNumber();
         numBots = gvh.id.getParticipants().size();
+        Log.d(TAG,"Constructed");
     }
 
     @Override
     public List<Object> callStarL() {
+        Log.d(TAG,"Running");
         while(true) {
             switch(stage) {
                 case INIT:
+                    Log.d(TAG,"Init");
                     numWaypoints = destinations.size();
                     stage = Stage.PICK;
                 case PICK:
+                    Log.d(TAG,"Pick");
                     arrived = false;
-                    if(destinations.isEmpty()) {
+                    if(destinations.isEmpty() && !loaded) {
+                        for(ItemPosition i : gvh.gps.getWaypointPositions())
+                            destinations.put(i.getName(), i);
+                        Log.d(TAG,"Waypoints Loaded " + destinations);
+                        stage = Stage.PICK;
+                        loaded=true;
+                    } else if(destinations.isEmpty() && loaded){
                         stage = Stage.DONE;
                     } else {
 //                        currentDestination = getDestination(destinations, destIndex);
@@ -79,11 +92,10 @@ public class FollowApp extends LogicThread {
                             destIndex = 0;
                         }
                         currentDestination = getDestination(destinations, destIndex);
-                        System.out.println(destinations);
-                        System.out.println(currentDestination);
                         //Log.d(TAG, currentDestination.toString());
                         destIndex++;
                         gvh.plat.moat.goTo(currentDestination);
+                        Log.d(TAG,"Motion Automaton go to called");
 
                         //gvh.plat.moat.takePicture();
                         //gvh.plat.moat.takePicture();
@@ -91,6 +103,7 @@ public class FollowApp extends LogicThread {
                     }
                     break;
                 case GO:
+                    Log.d(TAG,"Go");
                     if(!gvh.plat.moat.inMotion) {
                         if(!goForever) {
                             if (currentDestination != null)
@@ -107,12 +120,14 @@ public class FollowApp extends LogicThread {
                     }
                     break;
                 case WAIT:
+                    Log.d(TAG,"Wait");
                     if((messageCount >= numBots - 1) && arrived) {
                         messageCount = 0;
                         stage = Stage.PICK;
                     }
                     break;
                 case DONE:
+                    Log.d(TAG,"Done");
                     return null;
             }
             sleep(100);
