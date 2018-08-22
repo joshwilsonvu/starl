@@ -1,6 +1,9 @@
 # StarL 1.5.1
 
-### Links
+Find the documentation [here](https://verivital-starl-undergrads.github.io/starl/).
+
+https://wiki.cites.illinois.edu/wiki/display/MitraResearch/StarL
+
 
 [Javadocs](https://verivital-starl-undergrads.github.io/starl/)
 
