@@ -1,0 +1,13 @@
+[
+  {
+    "model": {
+      "type": "Model_Minidrone",
+      "address": "green1",
+      "name": "bot0"
+    },
+    "device": {
+      "type": "MotoE",
+      "address": "10.255.24.113"
+    }
+  }
+]

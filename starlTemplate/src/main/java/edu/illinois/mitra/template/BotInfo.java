@@ -1,17 +1,15 @@
 package edu.illinois.mitra.template;
 
 public class BotInfo {
-    public final String name;
-    public final String typeName;
-    public final String mac;
-    public final String device;
-    public final String ip;
-
-    BotInfo(String name, String typeName, String mac, String device, String ip) {
-        this.name = name;
-        this.typeName = typeName;
-        this.mac = mac;
-        this.device = device;
-        this.ip = ip;
+    public static class Model {
+        public String type;
+        public String address;
+        public String name;
     }
+    public static class Device {
+        public String type;
+        public String address;
+    }
+    public Model model;
+    public Device device;
 }

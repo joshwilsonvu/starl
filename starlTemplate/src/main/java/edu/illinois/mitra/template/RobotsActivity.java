@@ -1,9 +1,9 @@
 package edu.illinois.mitra.template;
 
-import java.util.Arrays;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -15,11 +15,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.content.res.XmlResourceParser;
 import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.util.Pair;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
@@ -29,27 +27,23 @@ import android.widget.Toast;
 import android.os.Bundle;
 import android.os.StrictMode;
 
+import com.google.gson.Gson;
+
 import edu.illinois.mitra.starl.comms.MessageContents;
 import edu.illinois.mitra.starl.comms.RobotMessage;
 import edu.illinois.mitra.starl.gvh.GlobalVarHolder;
 import edu.illinois.mitra.starl.gvh.RealGlobalVarHolder;
 import edu.illinois.mitra.starl.interfaces.LogicThread;
 import edu.illinois.mitra.starl.interfaces.MessageListener;
-import edu.illinois.mitra.starl.models.Model;
 import edu.illinois.mitra.starl.models.ModelRegistry;
 import edu.illinois.mitra.starl.models.Model_Drone;
 import edu.illinois.mitra.starl.objects.Common;
 import edu.illinois.mitra.starl.objects.HandlerMessage;
 
 import edu.illinois.mitra.demo.follow.FollowApp;
-//import edu.illinois.mitra.demo.race.RaceApp;
 
 public class RobotsActivity extends Activity implements MessageListener {
 	private static final String TAG = "RobotsActivity";
-	private static final String ERR = "Critical Error";
-
-	private static final String IDENTITY_FILE_URL = "https://dl.dropbox.com/s/dwfqdhbf5vdtz18/robots.rif?dl=1";
-	private static final String[] ERROR_PARTICIPANTS = {"ERROR"};
 
 	private static final boolean ENABLE_TRACING = false;
 
@@ -64,7 +58,6 @@ public class RobotsActivity extends Activity implements MessageListener {
 	private ExecutorService executor = Executors.newFixedThreadPool(1);
 	private Future<List<Object>> results;
 	private LogicThread runThread;
-	private MainHandler mainHandler;
 	private WifiManager.MulticastLock multicastLock;
 
 	private BotInfo[] botInfo;
@@ -88,16 +81,9 @@ public class RobotsActivity extends Activity implements MessageListener {
 		multicastLock.setReferenceCounted(true);
 		multicastLock.acquire();
 
-
-
-
 		// Load the participants
 		//botInfo = IdentityLoader.loadIdentities(IDENTITY_FILE_URL);
-		botInfo = loadBotInfo();
-
-		// TODO remove
-
-
+		botInfo = loadBotInfo(R.raw.botinfo);
 
 
 		// Initialize preferences holder
@@ -114,7 +100,7 @@ public class RobotsActivity extends Activity implements MessageListener {
 
 
 		// Create the main handler
-		mainHandler = new MainHandler(this, pbBluetooth, pbBattery, cbGPS, cbBluetooth, cbRunning, txtDebug, cbRegistered);
+		MainHandler mainHandler = new MainHandler(this, pbBluetooth, pbBattery, cbGPS, cbBluetooth, cbRunning, txtDebug, cbRegistered);
 
 		//if (participantNames == null || participantIPs == null) {
 		//	Toast.makeText(this, "Error loading identity file!", Toast.LENGTH_LONG).show();
@@ -126,11 +112,11 @@ public class RobotsActivity extends Activity implements MessageListener {
 		// Create the global variable holder
 		HashMap<String, String> hm_participants = new HashMap<String, String>();
 		for (BotInfo info : botInfo) {
-			hm_participants.put(info.name, info.ip);
+			hm_participants.put(info.model.name, info.device.address);
 		}
 
-		gvh = new RealGlobalVarHolder(botInfo[selectedRobot].name, hm_participants, botInfo[selectedRobot].typeName,
-				botInfo[selectedRobot].mac, mainHandler, this);
+		gvh = new RealGlobalVarHolder(botInfo[selectedRobot].model.name, hm_participants, botInfo[selectedRobot].model.name,
+				botInfo[selectedRobot].model.address, mainHandler, this);
 		mainHandler.setGvh(gvh);
 
 
@@ -228,7 +214,7 @@ public class RobotsActivity extends Activity implements MessageListener {
 		cbRegistered = (CheckBox) findViewById(R.id.cbRegistered);
 
 
-		if (!ModelRegistry.isInstance(botInfo[selectedRobot].typeName, Model_Drone.class)) {
+		if (!ModelRegistry.isInstance(botInfo[selectedRobot].model.type, Model_Drone.class)) {
 			cbRegistered.setVisibility(View.GONE);
 		} else {
 			cbBluetooth.setText("Drone Connected");
@@ -236,10 +222,10 @@ public class RobotsActivity extends Activity implements MessageListener {
 
 		final String[] participantNames = new String[botInfo.length];
 		for (int i = 0; i < participantNames.length; i++) {
-			participantNames[i] = botInfo[i].name;
+			participantNames[i] = botInfo[i].model.name;
 		}
 
-		txtRobotName.setText(botInfo[selectedRobot].name);
+		txtRobotName.setText(botInfo[selectedRobot].model.name);
 		txtRobotName.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
 				AlertDialog.Builder sel_robot_builder = new AlertDialog.Builder(RobotsActivity.this);
@@ -263,7 +249,6 @@ public class RobotsActivity extends Activity implements MessageListener {
 				sel_robot.show();
 			}
 		});
-
 	}
 
 	@Override
@@ -290,12 +275,24 @@ public class RobotsActivity extends Activity implements MessageListener {
 	}
 
 	/**
-	 * add color, robot model, and device model for each robot here
-	 * @return an array of BotInfoSelector objects representing tablet and robot info
+	 * Load the robot info from a string.
+	 *
+	 * @return an array of BotInfo objects representing tablet and robot pair info
 	 */
-	private BotInfo[] loadBotInfo() {
+	private BotInfo[] loadBotInfo(String json) {
+		Gson gson = new Gson();
+		return gson.fromJson(json, BotInfo[].class);
+	}
 
-		return new BotInfoLoader(this).loadBotInfo();
+	/**
+	 * Load the robot info from a resource.
+	 *
+	 * @return an array of BotInfo objects representing tablet and robot pair info
+	 */
+	private BotInfo[] loadBotInfo(int resourceID) {
+		Gson gson = new Gson();
+		Reader reader = new InputStreamReader(getResources().openRawResource(resourceID));
+		return gson.fromJson(reader, BotInfo[].class);
 	}
 
 }
